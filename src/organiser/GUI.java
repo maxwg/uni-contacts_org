@@ -1,6 +1,5 @@
 package organiser;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
@@ -10,15 +9,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+
+import organiser.contact.ContactName;
+import organiser.contact.ContactRecord;
 
 public class GUI implements Runnable, ActionListener{
 	JFrame frame;
-	ArrayList<? extends Record> records;
+	List<Record> records;
 	JPanel contactsPane;
 	JPanel detailsPane;
 	
@@ -61,14 +67,17 @@ public class GUI implements Runnable, ActionListener{
 			}
 		});
 		
-		contactsPane = new JPanel(new BorderLayout(0,0));
+		contactsPane = new JPanel(null);
 		contactsPane.setBackground(Color.green);
-		detailsPane = new JPanel(new BorderLayout(0,0));
+		detailsPane = new JPanel(null);
 		detailsPane.setBackground(Color.blue);
+		JScrollPane contactsPaneScroll = new JScrollPane(contactsPane);
+		JScrollPane detailsPaneScroll = new JScrollPane(detailsPane);
+		contactsPaneScroll.setBorder(BorderFactory.createEmptyBorder());
+		detailsPaneScroll.setBorder(BorderFactory.createEmptyBorder());
 		resizeScreen();
-		
+
 		renderRecords();
-		
 		
 		frame.getContentPane().add(contactsPane);
 		frame.getContentPane().add(detailsPane);
@@ -85,7 +94,18 @@ public class GUI implements Runnable, ActionListener{
 	}
 	
 	private void renderRecords(){
-		
+		records = RecordFactory.instance().getRecords();
+		if(records.size() == 0){
+			ContactRecord r = new ContactRecord();
+			r.name.setValue(new ContactName("JAMES", "DUDE"));
+			RecordPaneItem p = getRecordSummaryPanel(r);
+			contactsPane.add(p);
+		}
+	}
+	
+	private RecordPaneItem getRecordSummaryPanel(Record record){
+		RecordPaneItem panel = new RecordPaneItem(record.getMainImage(), record.getMainLabel());
+		return panel;
 	}
 	
 	public static void main(String[] args) {

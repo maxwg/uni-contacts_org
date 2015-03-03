@@ -1,4 +1,4 @@
-package organiser.Contact;
+package organiser.contact;
 
 import javax.swing.JPanel;
 

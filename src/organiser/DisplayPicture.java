@@ -1,11 +1,11 @@
 package organiser;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
 public class DisplayPicture implements DisplayableItem {
-	public Image img;
+	public BufferedImage img;
 	public DisplayPicture(){
 		img = null;
 	}

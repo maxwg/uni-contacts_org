@@ -1,7 +1,11 @@
-package organiser.Contact;
+package organiser.contact;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import organiser.DataItem;
 import organiser.DisplayPicture;
@@ -17,15 +21,25 @@ public class ContactRecord implements Record {
 	public static final String EMAIL = "Email";
 	public static final String HOMEADDRESS = "Home Address";
 	public static final String WORKADDRESS = "Work Address";
+	public static BufferedImage defaultImg;
+	static {
+		try{
+			defaultImg = ImageIO.read(new File("src/organiser/res/blankDP.jpg"));
+		}
+		catch(IOException e){
+			System.err.println("FAILURE TO LOAD VITAL RESOURCES!");
+			System.exit(-1);
+		}
+	}
 	
-	private DataItem<ContactName> name;
-	private DataItem<DisplayPicture> picture;
-	private DataItem<PhoneNumber> homePh;
-	private DataItem<PhoneNumber> workPh;
-	private DataItem<PhoneNumber> mobilePh;
-	private DataItem<Email> email;
-	private DataItem<Address> homeAddress;
-	private DataItem<Address> workAddress;
+	public final DataItem<ContactName> name;
+	public final DataItem<DisplayPicture> picture;
+	public final DataItem<PhoneNumber> homePh;
+	public final DataItem<PhoneNumber> workPh;
+	public final DataItem<PhoneNumber> mobilePh;
+	public final DataItem<Email> email;
+	public final DataItem<Address> homeAddress;
+	public final DataItem<Address> workAddress;
 	//allItems also acts as a container for custom attributes!
 	private ArrayList<DataItem<? extends DisplayableItem>> allItems;
 	
@@ -62,8 +76,8 @@ public class ContactRecord implements Record {
 	}
 
 	@Override
-	public Image getMainImage() {
-		return picture.getValue().img;
+	public BufferedImage getMainImage() {
+		return picture.getValue().img != null ? picture.getValue().img : defaultImg;
 	}
 
 	@Override

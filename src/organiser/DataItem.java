@@ -24,4 +24,7 @@ public class DataItem<T extends DisplayableItem> {
 	public T getValue(){
 		return value;
 	}
+	public void setValue(T value){
+		this.value = value;
+	}
 }
