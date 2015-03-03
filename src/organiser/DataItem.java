@@ -2,7 +2,7 @@ package organiser;
 
 import java.util.UUID;
 
-public class DataItem<T> {
+public class DataItem<T extends DisplayableItem> {
 	private UUID id;
 	private String label;
 	private T value;
