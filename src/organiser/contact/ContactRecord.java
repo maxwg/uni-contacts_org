@@ -46,9 +46,9 @@ public class ContactRecord implements Record {
 	public ContactRecord(){
 		name = new DataItem<ContactName>(NAME,new ContactName());
 		picture = new DataItem<DisplayPicture>(PICTURE, new DisplayPicture());
+		mobilePh = new DataItem<PhoneNumber>(MOBILEPH, new PhoneNumber());
 		homePh = new DataItem<PhoneNumber>(HOMEPH, new PhoneNumber());
 		workPh = new DataItem<PhoneNumber>(WORKPH, new PhoneNumber());
-		mobilePh = new DataItem<PhoneNumber>(MOBILEPH, new PhoneNumber());
 		email = new DataItem<Email>(EMAIL, new Email());
 		homeAddress = new DataItem<Address>(HOMEADDRESS, new Address());
 		workAddress = new DataItem<Address>(WORKADDRESS, new Address());
@@ -74,7 +74,13 @@ public class ContactRecord implements Record {
 	public String getMainLabel() {
 		return name.getValue().given + " " + name.getValue().surname;
 	}
-
+	@Override
+	
+	public String getSecondaryLabel() { 
+		//If there is no mobile, display email instead. Else nothing ("").
+		return mobilePh.getValue().number == "" ? email.getValue().getEmail() : mobilePh.getValue().number;
+	}
+	
 	@Override
 	public BufferedImage getMainImage() {
 		return picture.getValue().img != null ? picture.getValue().img : defaultImg;
@@ -91,5 +97,4 @@ public class ContactRecord implements Record {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

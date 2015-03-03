@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 
 import organiser.contact.ContactName;
 import organiser.contact.ContactRecord;
+import organiser.contact.Email;
 
 public class GUI implements Runnable, ActionListener{
 	JFrame frame;
@@ -98,13 +99,14 @@ public class GUI implements Runnable, ActionListener{
 		if(records.size() == 0){
 			ContactRecord r = new ContactRecord();
 			r.name.setValue(new ContactName("JAMES", "DUDE"));
+			r.email.setValue(new Email("JAMES@DUDE.COM"));
 			RecordPaneItem p = getRecordSummaryPanel(r);
 			contactsPane.add(p);
 		}
 	}
 	
 	private RecordPaneItem getRecordSummaryPanel(Record record){
-		RecordPaneItem panel = new RecordPaneItem(record.getMainImage(), record.getMainLabel());
+		RecordPaneItem panel = new RecordPaneItem(record.getMainImage(), record.getMainLabel(), record.getSecondaryLabel());
 		return panel;
 	}
 	
