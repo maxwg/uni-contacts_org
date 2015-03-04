@@ -7,26 +7,23 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import organiser.contact.ContactName;
 import organiser.contact.ContactRecord;
 import organiser.contact.Email;
 
-public class GUI implements Runnable, ActionListener{
+public class GUI implements Runnable, ActionListener, Resizable{
 	JFrame frame;
 	List<Record> records;
-	JPanel contactsPane;
+	SidePanel contactsPane;
+	ModernScrollPane contactsPaneScroll;
+	ModernScrollPane detailsPaneScroll;
 	JPanel detailsPane;
 	
 	public GUI(){
@@ -38,70 +35,48 @@ public class GUI implements Runnable, ActionListener{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		screenSize.height = screenSize.height > 768 ? 768 : screenSize.height;
+		screenSize.height = screenSize.height > 600 ? 600 : screenSize.height;
 		screenSize.width = screenSize.width > 800 ? 800 : screenSize.width;
 		frame.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
 		frame.pack();
-		frame.addComponentListener(new ComponentListener() {
-			
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-				resizeScreen();
-			}
-			
-			@Override
-			public void componentMoved(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentHidden(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		ResizeListener.AttachResizeEvent(this, frame);
 		
-		contactsPane = new JPanel(null);
+		contactsPane = new SidePanel();
 		contactsPane.setBackground(Color.green);
 		detailsPane = new JPanel(null);
 		detailsPane.setBackground(Color.blue);
-		JScrollPane contactsPaneScroll = new JScrollPane(contactsPane);
-		JScrollPane detailsPaneScroll = new JScrollPane(detailsPane);
-		contactsPaneScroll.setBorder(BorderFactory.createEmptyBorder());
-		detailsPaneScroll.setBorder(BorderFactory.createEmptyBorder());
-		resizeScreen();
-
+		contactsPaneScroll = new ModernScrollPane(contactsPane);
+		detailsPaneScroll = new ModernScrollPane(detailsPane);
+		ResizeListener.AttachResizeEvent(contactsPane, frame);
 		renderRecords();
 		
-		frame.getContentPane().add(contactsPane);
-		frame.getContentPane().add(detailsPane);
+		frame.getContentPane().add(contactsPaneScroll);
+		frame.getContentPane().add(detailsPaneScroll);
 		frame.pack();
 		frame.setVisible(true);
+		manageResize();
 	}
 	
-	private void resizeScreen(){
+	public void manageResize(){
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
 		contactsPane.setSize(new Dimension(Math.min(264,frameWidth/3),frameHeight));
+		contactsPaneScroll.setSize(new Dimension(Math.min(264,frameWidth/3),frameHeight));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(), frameHeight));
-		detailsPane.setLocation(new Point(contactsPane.getWidth(), 0));
+		detailsPaneScroll.setSize(new Dimension(frameWidth - contactsPane.getWidth(), frameHeight));
+		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(), 0));
 	}
 	
 	private void renderRecords(){
 		records = RecordFactory.instance().getRecords();
 		if(records.size() == 0){
-			ContactRecord r = new ContactRecord();
-			r.name.setValue(new ContactName("JAMES", "DUDE"));
-			r.email.setValue(new Email("JAMES@DUDE.COM"));
-			RecordPaneItem p = getRecordSummaryPanel(r);
-			contactsPane.add(p);
+			for(int i =0; i<25; i++){
+				ContactRecord r = new ContactRecord();
+				r.name.setValue(new ContactName("JAMES", "DUDE"));
+				r.email.setValue(new Email("JAMES@DUDE.COM"));
+				RecordPaneItem p = getRecordSummaryPanel(r);
+				contactsPane.add(p);
+			}
 		}
 	}
 	

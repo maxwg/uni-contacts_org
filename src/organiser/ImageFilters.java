@@ -6,15 +6,18 @@ package organiser;
  */
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
 
-import com.jhlabs.image.GaussianFilter;
+import com.jhlabs.image.BoxBlurFilter;
 import com.jhlabs.image.GlowFilter;
 
 public class ImageFilters {
+	static final BoxBlurFilter RecordBlurFilter = new BoxBlurFilter(50, 50, 1);
+	static GlowFilter RecordGlowFilter;
+	static {
+		RecordGlowFilter = new GlowFilter();
+		RecordGlowFilter.setAmount(-0.01f);
+	}
 	
 	public static BufferedImage resizeImage(BufferedImage img, int maxSizeTo){
 		int rsWidth = img.getWidth() < img.getHeight() ? maxSizeTo : maxSizeTo * img.getWidth()/img.getHeight();
@@ -26,8 +29,17 @@ public class ImageFilters {
 	    return rtn;
 	}
 	
-	public static void blurImage(BufferedImage image, float radius) {
-		(new GaussianFilter(radius)).filter(image, image);
+	public static void blurImage(BufferedImage image, int radius) {
+		(new BoxBlurFilter(radius, radius, 1)).filter(image, image);
+	}
+	
+	public static void recordBlur(BufferedImage image) {
+		//More optimized - does not create a blur filter each time.
+		RecordBlurFilter.filter(image, image);
+	}
+	
+	public static void recordDarken(BufferedImage image) {
+		RecordGlowFilter.filter(image, image);
 	}
 	
 	public static void glowImage(BufferedImage image, float radius) {

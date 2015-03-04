@@ -38,8 +38,8 @@ public class RecordPaneItem extends JPanel {
 		subtext.setForeground(Color.LIGHT_GRAY);
 		
 		BufferedImage bgImage = ImageFilters.resizeImage(img, 300);
-	    ImageFilters.glowImage(bgImage, -0.008f);
-	    ImageFilters.blurImage(bgImage, 80f);
+	    ImageFilters.recordDarken(bgImage);
+	    ImageFilters.recordBlur(bgImage);
 		
 		bg = new JLabel(new ImageIcon(bgImage));
 		bg.setSize(300, 56);
