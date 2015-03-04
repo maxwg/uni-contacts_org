@@ -1,5 +1,6 @@
 package organiser;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class SidePanel extends JPanel implements Resizable {
 	
 	public SidePanel(){
 		super(null);
+		this.setBackground(new Color(24,24,24));
 		items = new ArrayList<Component>();
 		curPos=1;
 	}
@@ -29,7 +31,7 @@ public class SidePanel extends JPanel implements Resizable {
 	public void manageResize(){
 		this.setPreferredSize(new Dimension(300, curPos));
 		for(Component comp : items){
-			comp.setSize(this.getWidth()-32,comp.getHeight());
+			comp.setSize(this.getHeight() > this.getPreferredSize().height ? this.getWidth() -2 : this.getWidth()-8,comp.getHeight());
 		}
 	}
 }
