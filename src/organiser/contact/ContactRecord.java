@@ -15,20 +15,21 @@ import organiser.Record;
 import organiser.RecordFactory;
 
 public class ContactRecord implements Record {
-	public static final String XMLTITLE = "ContactRecord";
 	public static final String NAME = "Name";
 	public static final String PICTURE = "Picture";
-	public static final String HOMEPH = "Home Phone";
-	public static final String WORKPH = "Work Phone";
-	public static final String MOBILEPH = "Mobile Phone";
+	public static final String MOBILEPH = "Mobile";
+	public static final String HOMEPH = "Home Ph";
+	public static final String WORKPH = "Work Ph";
 	public static final String EMAIL = "Email";
-	public static final String HOMEADDRESS = "Home Address";
-	public static final String WORKADDRESS = "Work Address";
-	public static BufferedImage defaultImg;
+	public static final String ADDRESS = "Address";
+	public static BufferedImage defaultImg1;
+	public static BufferedImage defaultImg2;
 	static {
 		try {
-			defaultImg = ImageIO
+			defaultImg1 = ImageIO
 					.read(new File("src/organiser/res/blankDP.jpg"));
+			defaultImg2 = ImageIO
+					.read(new File("src/organiser/res/cow.jpg"));
 		} catch (IOException e) {
 			System.err.println("FAILURE TO LOAD VITAL RESOURCES!");
 			System.exit(-1);
@@ -42,10 +43,10 @@ public class ContactRecord implements Record {
 	public DataItem<PhoneNumber> mobilePh;
 	public DataItem<Email> email;
 	public DataItem<Address> homeAddress;
-	public DataItem<Address> workAddress;
 	// allItems also acts as a container for custom attributes!
 	private ArrayList<DataItem<? extends DataItemValue>> allItems;
 	private UUID id;
+	private boolean needsSave;
 
 	public ContactRecord() {
 		id = UUID.randomUUID();
@@ -55,8 +56,8 @@ public class ContactRecord implements Record {
 		homePh = new DataItem<PhoneNumber>(HOMEPH, new PhoneNumber());
 		workPh = new DataItem<PhoneNumber>(WORKPH, new PhoneNumber());
 		email = new DataItem<Email>(EMAIL, new Email());
-		homeAddress = new DataItem<Address>(HOMEADDRESS, new Address());
-		workAddress = new DataItem<Address>(WORKADDRESS, new Address());
+		homeAddress = new DataItem<Address>(ADDRESS, new Address());
+		needsSave=false;
 	}
 
 	@Override
@@ -65,12 +66,11 @@ public class ContactRecord implements Record {
 			allItems = new ArrayList<DataItem<? extends DataItemValue>>();
 			allItems.add(name);
 			allItems.add(picture);
+			allItems.add(mobilePh);
 			allItems.add(homePh);
 			allItems.add(workPh);
-			allItems.add(mobilePh);
 			allItems.add(email);
 			allItems.add(homeAddress);
-			allItems.add(workAddress);
 		}
 		return allItems;
 	}
@@ -89,8 +89,9 @@ public class ContactRecord implements Record {
 
 	@Override
 	public BufferedImage getMainImage() {
+		System.out.println(Math.random());
 		return picture.getValue().img != null ? picture.getValue().img
-				: defaultImg;
+				:(Math.random()>0.5)? defaultImg1 : defaultImg2;
 	}
 
 	@Override
@@ -107,11 +108,13 @@ public class ContactRecord implements Record {
 	public void Save() throws IOException {
 		RecordFactory.instance().removeRecord(this.getID());
 		RecordFactory.instance().addRecord(this);
+		this.setNeedsSave(false);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void importItem(String itemXML) throws Exception {
+		allItems = new ArrayList<DataItem<? extends DataItemValue>>();
 		String[] dataItems = itemXML.split("" + '\n');
 		for (String item : dataItems) {
 			Class valueClass = Class.forName(
@@ -120,8 +123,8 @@ public class ContactRecord implements Record {
 			String innerData = RecordFactory.getTagValue(item);
 			value.ImportXMLData(innerData.substring(innerData.indexOf('\1')+1));
 			String label = innerData.substring(0,innerData.indexOf('\1'));
-			System.out.println(label);
 			DataItem<?> dataItem = new DataItem<DataItemValue>(label,value);
+			allItems.add(dataItem);
 			if(valueClass == ContactName.class && label.equals(NAME))
 				name = (DataItem<ContactName>)dataItem;
 			if(valueClass == DisplayPicture.class && label.equals(PICTURE))
@@ -136,7 +139,14 @@ public class ContactRecord implements Record {
 	@Override
 	public String exportData() {
 		StringBuilder xml = new StringBuilder();
-		xml.append(startXML(XMLTITLE) + getID() + '\n');
+		xml.append(startXML(RecordFactory.RECORD+" "+this.getClass().toString()) + getID() + '\n');
+		xml.append(exportInnerData());
+		xml.append(endXML(RecordFactory.RECORD));
+		return xml.toString();
+	}
+	
+	private String exportInnerData(){
+		StringBuilder xml = new StringBuilder();
 		for (DataItem<? extends DataItemValue> attr : getItems()) {
 			xml.append(startXML(attr.getValue().getClass().toString()));
 			xml.append(attr.getLabel());
@@ -144,7 +154,6 @@ public class ContactRecord implements Record {
 			xml.append(attr.getValue().ToXML());
 			xml.append(endXML(attr.getValue().getClass().toString()));
 		}
-		xml.append(endXML(XMLTITLE));
 		return xml.toString();
 	}
 
@@ -154,5 +163,22 @@ public class ContactRecord implements Record {
 
 	public static String endXML(String s) {
 		return "</" + s + ">\n";
+	}
+
+	@Override
+	public boolean needsSave() {
+		return needsSave;
+	}
+	
+	public void setNeedsSave(boolean needsSave){
+		this.needsSave = needsSave;
+	}
+
+	@Override
+	public ContactRecord deepCopy() throws Exception {
+		ContactRecord cpy = new ContactRecord();
+		cpy.setID(id);
+		cpy.importItem(this.exportInnerData());
+		return cpy;
 	}
 }

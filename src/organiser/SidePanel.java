@@ -15,7 +15,7 @@ public class SidePanel extends JPanel implements Resizable {
 		super(null);
 		this.setBackground(new Color(24,24,24));
 		items = new ArrayList<Component>();
-		curPos=1;
+		curPos=0;
 	}
 	
 	@Override

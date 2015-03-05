@@ -1,9 +1,15 @@
 package organiser.contact;
 
+import java.awt.Color;
+import java.awt.FontFormatException;
+import java.io.IOException;
+
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import organiser.DataItemValue;
-import organiser.DisplayableItem;
+import organiser.ModernJTextField;
+import organiser.UpdatePanel;
 
 public class ContactName implements DataItemValue{
 	public String given;
@@ -20,9 +26,16 @@ public class ContactName implements DataItemValue{
 	}
 	
 	@Override
-	public JPanel Display() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel Display() throws FontFormatException, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		JPanel p = new UpdatePanel(null);
+		p.setSize(800, 36);
+		p.setBackground(new Color(0,0,0,0));
+		final JTextField givenText = new ModernJTextField(this, ContactName.class.getField("given"), 140);
+		final JTextField surText = new ModernJTextField(this, ContactName.class.getField("surname"), 140);
+		surText.setLocation(150, 0);		
+		p.add(givenText);
+		p.add(surText);
+		return p;
 	}
 
 	@Override

@@ -1,9 +1,15 @@
 package organiser.contact;
 
+import java.awt.Color;
+import java.awt.FontFormatException;
+import java.io.IOException;
+
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import organiser.DataItemValue;
-import organiser.DisplayableItem;
+import organiser.ModernJTextField;
+import organiser.UpdatePanel;
 
 public class Address implements DataItemValue{
 	public String streetNo;
@@ -35,15 +41,39 @@ public class Address implements DataItemValue{
 	}
 	
 	@Override
-	public JPanel Display() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel Display() throws FontFormatException, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		JPanel p = new UpdatePanel(null);
+		p.setSize(800, 96);
+		p.setBackground(new Color(0,0,0,0));
+		final JTextField noText = new ModernJTextField(this, Address.class.getField("streetNo"), 40);
+		final JTextField nameText = new ModernJTextField(this, Address.class.getField("streetName"), 200);
+		final JTextField typeText = new ModernJTextField(this, Address.class.getField("streetType"), 30);
+		final JTextField suburbText = new ModernJTextField(this, Address.class.getField("suburb"), 140);
+		final JTextField stateText = new ModernJTextField(this, Address.class.getField("state"), 60);
+		final JTextField postCodeText = new ModernJTextField(this, Address.class.getField("postcode"), 70);
+		final JTextField countryText = new ModernJTextField(this, Address.class.getField("country"), 140);
+		nameText.setLocation(50, 0);	
+		typeText.setLocation(260, 0);
+		suburbText.setLocation(0,32);
+		stateText.setLocation(150, 32);
+		postCodeText.setLocation(220, 32);
+		countryText.setLocation(150, 64);
+		p.add(noText);
+		p.add(nameText);
+		p.add(typeText);
+		p.add(suburbText);
+		p.add(stateText);
+		p.add(postCodeText);
+		p.add(countryText);
+		return p;
 	}
 
 	@Override
 	public void ImportXMLData(String xml) {
 		// TODO Auto-generated method stub
 		String[] parts = xml.split(""+'\1', -1);
+		System.out.println(xml);
+		System.out.println(parts[0]);
 		streetNo = parts[0];
 		streetName = parts[1];
 		streetType = parts[2];
@@ -51,6 +81,7 @@ public class Address implements DataItemValue{
 		state = parts[4];
 		postcode = parts[5];
 		country = parts[6];
+		System.out.println(ToXML());
 	}
 
 	@Override

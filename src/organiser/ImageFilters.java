@@ -20,7 +20,7 @@ public class ImageFilters {
 		RecordGlowFilter = new GlowFilter();
 		RecordGlowFilter.setAmount(-0.02f);
 	}
-	private static final BoxBlurFilter DetailsBlurFilter = new BoxBlurFilter(80, 80, 1);
+	private static final BoxBlurFilter DetailsBlurFilter = new BoxBlurFilter(75, 75, 1);
 	
 	public static BufferedImage resizeImage(BufferedImage img, int maxSizeTo){
 		int rsWidth = img.getWidth() < img.getHeight() ? maxSizeTo : maxSizeTo * img.getWidth()/img.getHeight();

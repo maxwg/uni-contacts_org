@@ -1,18 +1,22 @@
 package organiser;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import organiser.contact.ContactName;
@@ -23,8 +27,12 @@ public class GUI implements Runnable, ActionListener, Resizable {
 	JFrame frame;
 	SidePanel contactsPane;
 	DetailPanel detailsPane;
+	TopMenu topMenu;
 	ModernScrollPane contactsPaneScroll;
 	ModernScrollPane detailsPaneScroll;
+	List<RecordPaneItem> loadedRecords;
+	RecordPaneItem selectedRecord;
+	Record curRecordCache;
 
 	public GUI() {
 		SwingUtilities.invokeLater(this);
@@ -34,10 +42,11 @@ public class GUI implements Runnable, ActionListener, Resizable {
 		frame = new JFrame("Contacts");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
+		frame.setUndecorated(true);
 		Rectangle screenSize = GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		screenSize.height = screenSize.height > 600 ? 600 : screenSize.height;
-		screenSize.width = screenSize.width > 900 ? 900 : screenSize.width;
+		screenSize.height = screenSize.height > 660 ? 660 : screenSize.height;
+		screenSize.width = screenSize.width > 750 ? 750 : screenSize.width;
 		frame.setPreferredSize(new Dimension(screenSize.width,
 				screenSize.height));
 		frame.pack();
@@ -49,16 +58,28 @@ public class GUI implements Runnable, ActionListener, Resizable {
 		detailsPaneScroll = new ModernScrollPane(detailsPane, 42, 24);
 		ResizeListener.AttachResizeEvent(contactsPane, frame);
 		ResizeListener.AttachResizeEvent(detailsPane, frame);
-		renderRecords();
+		try {
+			renderRecords();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		frame.getContentPane().add(contactsPaneScroll);
 		frame.getContentPane().add(detailsPaneScroll);
+
+		topMenu = new TopMenu(frame, this);
+		frame.getContentPane().add(topMenu);
+
 		frame.pack();
 		frame.setVisible(true);
 		manageResize();
 	}
 
-	private void renderRecords() {
+	private void renderRecords() throws FontFormatException, IOException,
+			NoSuchFieldException, SecurityException, IllegalArgumentException,
+			IllegalAccessException {
+		loadedRecords = new ArrayList<RecordPaneItem>();
 		if (RecordFactory.instance().getRecords().size() == 0) {
 			for (int i = 0; i < 25; i++) {
 				ContactRecord r = new ContactRecord();
@@ -70,35 +91,47 @@ public class GUI implements Runnable, ActionListener, Resizable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				RecordPaneItem p = getRecordSummaryPanel(r);
-				System.out.println(r.exportData());
+				RecordPaneItem p = new RecordPaneItem(r, this);
 				contactsPane.add(p);
 			}
 		}
-		for(Record r : RecordFactory.instance().getRecords()){
-			RecordPaneItem tag = getRecordSummaryPanel(r);
+		for (Record r : RecordFactory.instance().getRecords()) {
+			final RecordPaneItem tag = new RecordPaneItem(r, this);
+			loadedRecords.add(tag);
 			contactsPane.add(tag);
 		}
 	}
 
-	private RecordPaneItem getRecordSummaryPanel(Record record) {
-		RecordPaneItem panel = new RecordPaneItem(record.getMainImage(),
-				record.getMainLabel(), record.getSecondaryLabel());
-		return panel;
+	public void refreshRecordDisplay() {
+		if (selectedRecord != null)
+			selectedRecord.refreshPanel();
+	}
+	
+	public boolean currentRecordNeedsSave(){
+		if (selectedRecord != null)
+			return selectedRecord.curRecord.needsSave();
+		return false;
+	}
+
+	public void saveCurrentRecord() throws IOException {
+		if(selectedRecord != null)
+			selectedRecord.curRecord.Save();
 	}
 
 	public void manageResize() {
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
 		contactsPane.setSize(new Dimension(Math.min(264, frameWidth / 3),
-				frameHeight));
+				frameHeight - TopMenu.HEIGHT));
 		contactsPaneScroll.setSize(new Dimension(Math.min(264, frameWidth / 3),
-				frameHeight));
+				frameHeight - TopMenu.HEIGHT));
+		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),
-				frameHeight));
+				frameHeight - TopMenu.HEIGHT));
 		detailsPaneScroll.setSize(new Dimension(frameWidth
-				- contactsPane.getWidth(), frameHeight));
-		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(), 0));
+				- contactsPane.getWidth(), frameHeight - TopMenu.HEIGHT));
+		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(),
+				TopMenu.HEIGHT));
 	}
 
 	public static void main(String[] args) {

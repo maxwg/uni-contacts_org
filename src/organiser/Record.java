@@ -14,4 +14,7 @@ public interface Record {
 	public void Save() throws IOException;
 	public void importItem(String itemXML) throws Exception;
 	public String exportData();
+	public boolean needsSave();
+	public void setNeedsSave(boolean needSave);
+	public Record deepCopy() throws Exception;
 }

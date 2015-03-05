@@ -1,11 +1,18 @@
 package organiser.contact;
 
+import java.awt.Color;
+import java.awt.FontFormatException;
+import java.io.IOException;
+
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import organiser.DataItemValue;
+import organiser.ModernJTextField;
+import organiser.UpdatePanel;
 
 public class Email implements DataItemValue{
-	private String email;
+	public String email;
 	public Email(){
 		email = "";
 	}
@@ -29,9 +36,13 @@ public class Email implements DataItemValue{
 		return true;
 	}
 	@Override
-	public JPanel Display() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel Display() throws FontFormatException, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		JPanel p = new UpdatePanel(null);
+		p.setSize(800, 36);
+		p.setBackground(new Color(0,0,0,0));
+		final JTextField emailText = new ModernJTextField(this, Email.class.getField("email"), 290);
+		p.add(emailText);
+		return p;
 	}
 	@Override
 	public void ImportXMLData(String xml) {
