@@ -72,8 +72,6 @@ public class Address implements DataItemValue{
 	public void ImportXMLData(String xml) {
 		// TODO Auto-generated method stub
 		String[] parts = xml.split(""+'\1', -1);
-		System.out.println(xml);
-		System.out.println(parts[0]);
 		streetNo = parts[0];
 		streetName = parts[1];
 		streetType = parts[2];
@@ -81,7 +79,6 @@ public class Address implements DataItemValue{
 		state = parts[4];
 		postcode = parts[5];
 		country = parts[6];
-		System.out.println(ToXML());
 	}
 
 	@Override

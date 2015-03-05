@@ -74,29 +74,8 @@ public class RecordPaneItem extends JPanel {
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				int option = JOptionPane.YES_OPTION;
-				if (gui.currentRecordNeedsSave()) {
-					option = JOptionPane.showConfirmDialog(thisReference,
-							"MATE YOU HAVENT SAVED. SAVE NOW?");
-					if (option == JOptionPane.CANCEL_OPTION)
-						return;
-				}
-				if (option == JOptionPane.YES_OPTION) {
-					try {
-						gui.saveCurrentRecord();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					gui.refreshRecordDisplay();
-				}
-				else if (option == JOptionPane.NO_OPTION){
-					try {
-						gui.selectedRecord.curRecord = gui.curRecordCache.deepCopy();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
 				try {
+					gui.showSaveDialog();
 					gui.detailsPane.loadRecord(curRecord);
 					gui.detailsPane.manageResize();
 					gui.detailsPane.repaint();

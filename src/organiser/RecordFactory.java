@@ -64,7 +64,7 @@ public class RecordFactory {
 		return records;
 	}
 
-	public void removeRecord(UUID id) throws IOException {
+	public void removeRecord(Record record) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(data));
 		File tmp = File.createTempFile("tmp", "");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(tmp));
@@ -73,7 +73,7 @@ public class RecordFactory {
 		while ((line = reader.readLine()) != null) {
 			if (line != ""
 					&& getFirstTag(line).startsWith(RECORD)
-					&& id.equals(UUID.fromString(line.substring(line
+					&& record.getID().equals(UUID.fromString(line.substring(line
 							.indexOf('>') + 1)))) {
 				write = false;
 			} else {
@@ -88,6 +88,7 @@ public class RecordFactory {
 		writer.close();
 		data.delete();
 		tmp.renameTo(data);
+		records.remove(record);
 	}
 
 	public void addRecord(Record r) throws IOException {

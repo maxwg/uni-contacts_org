@@ -106,7 +106,7 @@ public class ContactRecord implements Record {
 
 	@Override
 	public void Save() throws IOException {
-		RecordFactory.instance().removeRecord(this.getID());
+		RecordFactory.instance().removeRecord(this);
 		RecordFactory.instance().addRecord(this);
 		this.setNeedsSave(false);
 	}

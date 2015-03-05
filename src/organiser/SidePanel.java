@@ -25,7 +25,20 @@ public class SidePanel extends JPanel implements Resizable {
 		curPos+=comp.getHeight()+1;
 		super.add(comp);
 		manageResize();
+		reRender();
 		return comp;
+	}
+	
+	public void reRender(){
+		this.removeAll();
+		curPos=0;
+		for(Component comp : items){
+			comp.setLocation(1, curPos);
+			curPos+=comp.getHeight()+1;
+			super.add(comp);
+		}
+		manageResize();
+		repaint();
 	}
 	
 	public void manageResize(){

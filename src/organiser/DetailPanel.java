@@ -105,6 +105,8 @@ public class DetailPanel extends JPanel implements Resizable {
 			setImage(curRecord.getMainImage());
 		if (save)
 			curRecord.setNeedsSave(true);
+		repaint();
+		manageResize();
 	}
 
 	void setCaption(String text) {
