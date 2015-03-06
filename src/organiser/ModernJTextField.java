@@ -3,6 +3,7 @@ package organiser;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -44,6 +45,7 @@ public class ModernJTextField extends JTextField {
 		this.setBackground(new Color(192, 192, 192));
 		this.setForeground(new Color(48, 48, 64));
 		this.setSize(width, 24);
+		this.setMargin(new Insets(0, 3, 0, 3));
 		this.setFont(Font.createFont(Font.TRUETYPE_FONT,
 				new File("src/organiser/res/fonts/OpenSans-Regular.ttf"))
 				.deriveFont(15f));

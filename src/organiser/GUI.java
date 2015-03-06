@@ -1,5 +1,6 @@
 package organiser;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
@@ -8,6 +9,8 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
