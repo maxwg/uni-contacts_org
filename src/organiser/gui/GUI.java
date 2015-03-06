@@ -121,7 +121,10 @@ public class GUI implements Runnable, Resizable {
 		this.detailsPane.refreshPanel(false);
 	}
 
-	public RecordPaneItem addToContactsPane(Record r, boolean select) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException, IOException {
+	public RecordPaneItem addToContactsPane(Record r, boolean select)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException,
+			FontFormatException, IOException {
 		final RecordPaneItem tag = new RecordPaneItem(r, this);
 		if (select)
 			detailsPane.loadRecord(tag);
@@ -140,9 +143,9 @@ public class GUI implements Runnable, Resizable {
 		deletedRecords.add(selectedRecord);
 		loadedRecords.remove(selectedRecord);
 		contactsPane.reRender();
-		if(loadedRecords.size()>0)
-			detailsPane.loadRecord(loadedRecords.get(Math.max(0,rpos-1)));
-		else{
+		if (loadedRecords.size() > 0)
+			detailsPane.loadRecord(loadedRecords.get(Math.max(0, rpos - 1)));
+		else {
 			addNewRecord();
 		}
 		manageResize();
@@ -188,9 +191,9 @@ public class GUI implements Runnable, Resizable {
 	public void manageResize() {
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
-		contactsPane.setSize(new Dimension(Math.min(264, frameWidth / 3),
+		contactsPane.setSize(new Dimension(Math.max(56,Math.min(264, frameWidth -424)),
 				frameHeight - TopMenu.HEIGHT));
-		contactsPaneScroll.setSize(new Dimension(Math.min(264, frameWidth / 3),
+		contactsPaneScroll.setSize(new Dimension(Math.max(56,Math.min(264, frameWidth -424)),
 				frameHeight - TopMenu.HEIGHT));
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),

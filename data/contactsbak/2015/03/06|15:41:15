@@ -17,15 +17,6 @@
 <class organiser.contact.Address>Address</class organiser.contact.Address>
 </Record>
 <Record class organiser.contact.ContactRecord>eeb26a43-4a85-4e3a-a6ea-26a02685b421
-<class organiser.contact.ContactName>NameEricMcCreath</class organiser.contact.ContactName>
-<class organiser.gui.DisplayPicture>Picture</class organiser.gui.DisplayPicture>
-<class organiser.contact.PhoneNumber>Mobile123123123</class organiser.contact.PhoneNumber>
-<class organiser.contact.PhoneNumber>Home Ph123123123</class organiser.contact.PhoneNumber>
-<class organiser.contact.PhoneNumber>Work Ph4324123321</class organiser.contact.PhoneNumber>
-<class organiser.contact.Email>Emaileric.mccreath@anu.edu.au</class organiser.contact.Email>
-<class organiser.contact.Address>Address3ericstcanberraact2620Australia</class organiser.contact.Address>
-</Record>
-<Record class organiser.contact.ContactRecord>623dce67-c59d-42ae-a237-41e7433c4e49
 <class organiser.contact.ContactName>NameNewPerson</class organiser.contact.ContactName>
 <class organiser.gui.DisplayPicture>Picture</class organiser.gui.DisplayPicture>
 <class organiser.contact.PhoneNumber>Mobile</class organiser.contact.PhoneNumber>
