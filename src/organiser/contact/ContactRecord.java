@@ -181,4 +181,9 @@ public class ContactRecord implements Record {
 		cpy.importItem(this.exportInnerData());
 		return cpy;
 	}
+
+	@Override
+	public int compareTo(Record arg0) {
+		return getMainLabel().compareTo(arg0.getMainLabel());
+	}
 }

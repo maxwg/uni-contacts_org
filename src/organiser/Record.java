@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.UUID;
 
-public interface Record {	
+public interface Record extends Comparable<Record>{	
 	public UUID getID();	
 	public void setID(UUID id);
 	public Iterable<DataItem<? extends DataItemValue>> getItems();

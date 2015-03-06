@@ -3,15 +3,13 @@ package organiser;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import organiser.contact.ContactRecord;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -26,7 +24,7 @@ public class RecordFactory {
 	public static final String RECORD = "Record";
 
 	private static RecordFactory instance;
-	ArrayList<Record> records;
+	List<Record> records;
 	File data;
 
 	public RecordFactory() {
@@ -153,6 +151,7 @@ public class RecordFactory {
 			}
 		}
 		br.close();
+		Collections.sort(getRecords());
 	}
 
 	public static String getFirstTag(String line) {
