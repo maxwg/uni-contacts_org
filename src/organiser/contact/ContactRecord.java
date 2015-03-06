@@ -8,11 +8,11 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import organiser.DataItem;
-import organiser.DataItemValue;
-import organiser.DisplayPicture;
-import organiser.Record;
-import organiser.RecordFactory;
+import organiser.business.DataItem;
+import organiser.business.DataItemValue;
+import organiser.business.Record;
+import organiser.business.RecordFactory;
+import organiser.gui.DisplayPicture;
 
 public class ContactRecord implements Record {
 	public static final String NAME = "Name";

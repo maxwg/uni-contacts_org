@@ -11,10 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import organiser.DataItemValue;
-import organiser.ModernButton;
-import organiser.ModernJTextField;
-import organiser.UpdatePanel;
+import organiser.business.DataItemValue;
+import organiser.gui.UpdatePanel;
+import organiser.modernUIElements.ModernButton;
+import organiser.modernUIElements.ModernJTextField;
 
 public class Email implements DataItemValue {
 	public String email;

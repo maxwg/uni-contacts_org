@@ -1,0 +1,27 @@
+<Record class organiser.contact.ContactRecord>0d3fe371-2287-4fdd-aa70-003d6edb23f7
+<class organiser.contact.ContactName>Namewhatmate</class organiser.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.contact.PhoneNumber>Mobile123213</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Home Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Work Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.Email>Email</class organiser.contact.Email>
+<class organiser.contact.Address>Address</class organiser.contact.Address>
+</Record>
+<Record class organiser.contact.ContactRecord>81853be2-75c2-4946-9826-a288c144dc4a
+<class organiser.contact.ContactName>NameJamesDude</class organiser.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.contact.PhoneNumber>Mobile</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Home Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Work Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.Email>Emailjames@dude.com</class organiser.contact.Email>
+<class organiser.contact.Address>Address</class organiser.contact.Address>
+</Record>
+<Record class organiser.contact.ContactRecord>600455f4-d8fe-4f4e-b0c9-48c30705f178
+<class organiser.contact.ContactName>NameNewPerson</class organiser.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.contact.PhoneNumber>Mobile</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Home Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Work Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.Email>Email</class organiser.contact.Email>
+<class organiser.contact.Address>Address</class organiser.contact.Address>
+</Record>

@@ -1,0 +1,9 @@
+<Record class organiser.contact.ContactRecord>0d3fe371-2287-4fdd-aa70-003d6edb23f7
+<class organiser.contact.ContactName>Namewhatmate</class organiser.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.contact.PhoneNumber>Mobile123213</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Home Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Work Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.Email>Email</class organiser.contact.Email>
+<class organiser.contact.Address>Address</class organiser.contact.Address>
+</Record>

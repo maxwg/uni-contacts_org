@@ -7,9 +7,9 @@ import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import organiser.DataItemValue;
-import organiser.ModernJTextField;
-import organiser.UpdatePanel;
+import organiser.business.DataItemValue;
+import organiser.gui.UpdatePanel;
+import organiser.modernUIElements.ModernJTextField;
 
 public class PhoneNumber implements DataItemValue{
 	public String number;
