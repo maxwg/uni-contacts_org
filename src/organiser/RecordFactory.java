@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,13 +24,14 @@ public class RecordFactory {
 	private static final int NONE = 0;
 	private static final int INRECORD = 1;
 	public static final String RECORD = "Record";
+	private static final String DBLOC = "data/contacts";
 
 	private static RecordFactory instance;
 	List<Record> records;
 	File data;
 
 	public RecordFactory() {
-		data = new File("data/contacts");
+		data = new File(DBLOC);
 		try {
 			initializeXMLDBIfNeeded();
 			importXMLDB();
@@ -84,8 +87,11 @@ public class RecordFactory {
 		reader.close();
 		writer.flush();
 		writer.close();
-		data.delete();
-		tmp.renameTo(data);
+		File databak = new File(DBLOC+"bak/"+(new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss").format(new Date())));
+		databak.getParentFile().mkdirs();
+		databak.createNewFile();
+		data.renameTo(databak);
+		tmp.renameTo(new File(DBLOC));
 		records.remove(record);
 	}
 

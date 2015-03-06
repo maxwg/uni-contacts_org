@@ -7,3 +7,12 @@
 <class organiser.contact.Email>Email</class organiser.contact.Email>
 <class organiser.contact.Address>Address</class organiser.contact.Address>
 </Record>
+<Record class organiser.contact.ContactRecord>d92698ef-ab4e-46d9-9247-049eb7d0449d
+<class organiser.contact.ContactName>NameNewPerson</class organiser.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.contact.PhoneNumber>Mobile</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Home Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.PhoneNumber>Work Ph</class organiser.contact.PhoneNumber>
+<class organiser.contact.Email>Email</class organiser.contact.Email>
+<class organiser.contact.Address>Address</class organiser.contact.Address>
+</Record>
