@@ -99,11 +99,11 @@ public class DetailPanel extends JPanel implements Resizable {
 		refreshPanel(false);
 	}
 
-	void refreshPanel(boolean save) {
+	void refreshPanel(boolean needsSave) {
 		setCaption(curRecord.getMainLabel());
 		if (curRecord.getMainImage() != mainPicture)
 			setImage(curRecord.getMainImage());
-		if (save)
+		if (needsSave)
 			curRecord.setNeedsSave(true);
 		repaint();
 		manageResize();

@@ -15,9 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import organiser.contact.ContactName;
 import organiser.contact.ContactRecord;
-import organiser.contact.Email;
 
 public class GUI implements Runnable, ActionListener, Resizable {
 	JFrame frame;
@@ -78,27 +76,15 @@ public class GUI implements Runnable, ActionListener, Resizable {
 			IllegalAccessException {
 		loadedRecords = new ArrayList<RecordPaneItem>();
 		deletedRecords = new ArrayList<RecordPaneItem>();
-		if (RecordFactory.instance().getRecords().size() == 0) {
-			for (int i = 0; i < 25; i++) {
-				ContactRecord r = new ContactRecord();
-				r.name.setValue(new ContactName("JAMES", "DUDE"));
-				r.email.setValue(new Email("JAMES@DUDE.COM"));
-				try {
-					r.Save();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				RecordPaneItem p = new RecordPaneItem(r, this);
-				contactsPane.add(p);
-			}
-		}
+
 		for (Record r : RecordFactory.instance().getRecords()) {
 			addToContactsPane(r, false);
 		}
 	}
-	
-	public void addNewRecord() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException{
+
+	public void addNewRecord() throws IOException, NoSuchFieldException,
+			SecurityException, IllegalArgumentException,
+			IllegalAccessException, FontFormatException {
 		ContactRecord r = new ContactRecord();
 		r.name.getValue().given = "New";
 		r.name.getValue().surname = "Person";
@@ -106,33 +92,53 @@ public class GUI implements Runnable, ActionListener, Resizable {
 		addToContactsPane(r, true);
 		detailsPane.loadRecord(r);
 	}
-	
-	public void undoRecordDelete() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException, IOException{
-		if (deletedRecords.size()>0){
-			RecordPaneItem recovered = deletedRecords.get(deletedRecords.size()-1);
+
+	public void undoRecordDelete() throws NoSuchFieldException,
+			SecurityException, IllegalArgumentException,
+			IllegalAccessException, FontFormatException, IOException {
+		showSaveDialog();
+		if (deletedRecords.size() > 0) {
+			RecordPaneItem recovered = deletedRecords
+					.get(deletedRecords.size() - 1);
 			selectedRecord = recovered;
 			contactsPane.add(recovered);
 			loadedRecords.add(recovered);
 			detailsPane.loadRecord(recovered.curRecord);
-			deletedRecords.remove(deletedRecords.size()-1);
+			deletedRecords.remove(deletedRecords.size() - 1);
+			this.selectedRecord.curRecord.setNeedsSave(true);
 		}
 	}
-	
-	public RecordPaneItem addToContactsPane(Record r, boolean select){
+
+	public void undoRecordChanges() throws Exception {
+		System.out.println("YEA");
+		this.selectedRecord.curRecord = curRecordCache.deepCopy();
+		this.detailsPane.loadRecord(this.selectedRecord.curRecord);
+		this.detailsPane.refreshPanel(false);
+	}
+
+	public RecordPaneItem addToContactsPane(Record r, boolean select) {
 		final RecordPaneItem tag = new RecordPaneItem(r, this);
-		if (select) selectedRecord = tag;
+		if (select)
+			selectedRecord = tag;
 		loadedRecords.add(tag);
 		contactsPane.add(tag);
 		return tag;
 	}
-	
-	public void deleteCurrentRecord() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException{
+
+	public void deleteCurrentRecord() throws IOException, NoSuchFieldException,
+			SecurityException, IllegalArgumentException,
+			IllegalAccessException, FontFormatException {
 		RecordFactory.instance().removeRecord(selectedRecord.curRecord);
-		contactsPane.items.remove(selectedRecord);
+		int rpos = contactsPane.items.indexOf(selectedRecord);
+		contactsPane.items.remove(rpos);
 		deletedRecords.add(selectedRecord);
 		loadedRecords.remove(selectedRecord);
 		contactsPane.reRender();
-		detailsPane.loadRecord(loadedRecords.get(0).curRecord);
+		if(loadedRecords.size()>0)
+			detailsPane.loadRecord(loadedRecords.get(Math.max(0,rpos-1)).curRecord);
+		else{
+			addNewRecord();
+		}
 		selectedRecord = loadedRecords.get(0);
 	}
 
@@ -152,12 +158,12 @@ public class GUI implements Runnable, ActionListener, Resizable {
 			selectedRecord.curRecord.Save();
 	}
 
-	public void showSaveDialog() throws IOException {
+	public int showSaveDialog() throws IOException {
 		if (currentRecordNeedsSave()) {
 			int option = JOptionPane.showConfirmDialog(selectedRecord,
 					"MATE YOU HAVENT SAVED. SAVE NOW?");
 			if (option == JOptionPane.CANCEL_OPTION)
-				return;
+				return JOptionPane.CANCEL_OPTION;
 			else if (option == JOptionPane.YES_OPTION) {
 				saveCurrentRecord();
 				refreshRecordDisplay();
@@ -168,7 +174,9 @@ public class GUI implements Runnable, ActionListener, Resizable {
 					e.printStackTrace();
 				}
 			}
+			return option;
 		}
+		return JOptionPane.YES_NO_OPTION;
 	}
 
 	public void manageResize() {

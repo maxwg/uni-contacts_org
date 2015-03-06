@@ -75,18 +75,15 @@ public class RecordPaneItem extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-					gui.showSaveDialog();
-					gui.detailsPane.loadRecord(curRecord);
-					gui.detailsPane.manageResize();
-					gui.detailsPane.repaint();
-				} catch (NoSuchFieldException | SecurityException
-						| IllegalArgumentException | IllegalAccessException
-						| FontFormatException | IOException e) {
-					e.printStackTrace();
-				}
-				gui.selectedRecord = thisReference;
-				try {
-					gui.curRecordCache = gui.selectedRecord.curRecord.deepCopy();
+					if (!(gui.showSaveDialog() == JOptionPane.CANCEL_OPTION)) {
+
+						gui.detailsPane.loadRecord(curRecord);
+						gui.detailsPane.manageResize();
+						gui.detailsPane.repaint();
+						gui.selectedRecord = thisReference;
+						gui.curRecordCache = gui.selectedRecord.curRecord
+								.deepCopy();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

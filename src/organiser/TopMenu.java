@@ -14,8 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import organiser.contact.ContactRecord;
-
 public class TopMenu extends JPanel implements Resizable {
 	public static final int HEIGHT = 42;
 	private static final long serialVersionUID = 2015353956108592989L;
@@ -34,8 +32,9 @@ public class TopMenu extends JPanel implements Resizable {
 
 		JButton exit = new ModernButton("Exit", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() {
-						System.exit(0);
+					public Object call() throws IOException {
+						if (!(gui.showSaveDialog() == JOptionPane.CANCEL_OPTION))
+							System.exit(0);
 						return null;
 					}
 				});
@@ -50,7 +49,10 @@ public class TopMenu extends JPanel implements Resizable {
 		save.setLocation(60, 0);
 		JButton add = new ModernButton("Add", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException {
+					public Object call() throws IOException,
+							NoSuchFieldException, SecurityException,
+							IllegalArgumentException, IllegalAccessException,
+							FontFormatException {
 						gui.showSaveDialog();
 						gui.addNewRecord();
 						return null;
@@ -59,7 +61,10 @@ public class TopMenu extends JPanel implements Resizable {
 		add.setLocation(120, 0);
 		JButton remove = new ModernButton("Remove", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException {
+					public Object call() throws IOException,
+							NoSuchFieldException, SecurityException,
+							IllegalArgumentException, IllegalAccessException,
+							FontFormatException {
 						gui.deleteCurrentRecord();
 						return null;
 					}
@@ -67,8 +72,11 @@ public class TopMenu extends JPanel implements Resizable {
 		remove.setLocation(180, 0);
 		JButton undo = new ModernButton("Undo", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, FontFormatException {
-						gui.undoRecordDelete();
+					public Object call() throws Exception {
+						if (gui.currentRecordNeedsSave())
+							gui.undoRecordChanges();
+						else
+							gui.undoRecordDelete();
 						return null;
 					}
 				});
