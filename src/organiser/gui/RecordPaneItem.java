@@ -111,7 +111,6 @@ public class RecordPaneItem extends JPanel {
 
 		BufferedImage bgImage = ImageFilters.resizeImage(img, 300);
 		ImageFilters.recordDarken(bgImage, selected);
-		System.out.println(selected);
 		ImageFilters.recordBlur(bgImage);
 
 		bg = new JLabel(new ImageIcon(bgImage));

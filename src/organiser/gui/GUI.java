@@ -216,11 +216,11 @@ public class GUI implements Runnable, Resizable {
 		int frameHeight = frame.getContentPane().getHeight();
 		contactsPane
 				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 424)), frameHeight
+						Math.min(264, frameWidth - 430)), frameHeight
 						- TopMenu.HEIGHT));
 		contactsPaneScroll
 				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 424)), frameHeight
+						Math.min(264, frameWidth - 430)), frameHeight
 						- TopMenu.HEIGHT));
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),

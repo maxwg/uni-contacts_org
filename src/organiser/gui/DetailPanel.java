@@ -94,7 +94,6 @@ public class DetailPanel extends JPanel implements Resizable {
 		labels = new ArrayList<Component>();
 		fields = new ArrayList<JPanel>();
 		for (DataItem<? extends DataItemValue> item : r.curRecord.getItems()) {
-			System.out.println(item.getValue().ToXML());
 			JPanel field = item.getValue().Display();
 			if (field != null) {
 				OJLabel itemLabel = new OJLabel(item.getLabel(), 24,
