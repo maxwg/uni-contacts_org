@@ -1,4 +1,4 @@
-package organiser.gui;
+package organiser.business;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import organiser.business.DataItemValue;
 
 public class DisplayPicture implements DataItemValue {
 	public BufferedImage img;

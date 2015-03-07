@@ -11,7 +11,8 @@ public interface Record extends Comparable<Record>{
 	public String getMainLabel();
 	public String getSecondaryLabel();
 	public BufferedImage getMainImage();
-	public void Save() throws IOException;
+	public void setMainImage(String path) throws IOException;
+	public void Save() throws IOException, Exception;
 	public void importItem(String itemXML) throws Exception;
 	public String exportData();
 	public boolean needsSave();

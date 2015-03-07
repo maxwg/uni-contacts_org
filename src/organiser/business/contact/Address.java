@@ -1,4 +1,4 @@
-package organiser.contact;
+package organiser.business.contact;
 
 import java.awt.Color;
 import java.awt.FontFormatException;

@@ -2,8 +2,11 @@ package organiser.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FontFormatException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +20,7 @@ import javax.swing.JPanel;
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
 import organiser.business.Record;
+import organiser.helpers.FileHelpers;
 import organiser.helpers.ImageFilters;
 import organiser.modernUIElements.OJLabel;
 
@@ -70,6 +74,8 @@ public class DetailPanel extends JPanel implements Resizable {
 		mainPictureContainer.setSize(200, 200);
 		mainPictureContainer.setLocation(24, 24);
 		setComponentZOrder(mainPictureContainer, 2);
+		setMainPictureClickAction();
+
 		this.add(mainPictureContainer);
 	}
 
@@ -131,6 +137,40 @@ public class DetailPanel extends JPanel implements Resizable {
 				ImageFilters.cropSquare(img), 200)));
 		bgCache = (ImageFilters.detailsBlur(ImageFilters.recordDarken(
 				ImageFilters.resizeImage(img, 300), false)));
+	}
+
+	void setMainPictureClickAction() {
+		mainPictureContainer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		mainPictureContainer.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					curRecord.setMainImage(FileHelpers.resizeAndCacheImage(
+							FileHelpers.showFileDialog(true), curRecord.getID()
+									.toString()));
+					refreshPanel(true);
+				} catch (IOException e) {
+					// Something broke -- debug!
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package organiser.contact;
+package organiser.business.contact;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,9 +10,9 @@ import javax.imageio.ImageIO;
 
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
+import organiser.business.DisplayPicture;
 import organiser.business.Record;
 import organiser.business.RecordFactory;
-import organiser.gui.DisplayPicture;
 
 public class ContactRecord implements Record {
 	public static final String NAME = "Name";
@@ -22,14 +22,11 @@ public class ContactRecord implements Record {
 	public static final String WORKPH = "Work Ph";
 	public static final String EMAIL = "Email";
 	public static final String ADDRESS = "Address";
-	public static BufferedImage defaultImg1;
-	public static BufferedImage defaultImg2;
+	public static BufferedImage defaultImg;
 	static {
 		try {
-			defaultImg1 = ImageIO
+			defaultImg = ImageIO
 					.read(new File("src/organiser/res/blankDP.jpg"));
-			defaultImg2 = ImageIO
-					.read(new File("src/organiser/res/cow.jpg"));
 		} catch (IOException e) {
 			System.err.println("FAILURE TO LOAD VITAL RESOURCES!");
 			System.exit(-1);
@@ -57,7 +54,7 @@ public class ContactRecord implements Record {
 		workPh = new DataItem<PhoneNumber>(WORKPH, new PhoneNumber());
 		email = new DataItem<Email>(EMAIL, new Email());
 		homeAddress = new DataItem<Address>(ADDRESS, new Address());
-		needsSave=false;
+		needsSave = false;
 	}
 
 	@Override
@@ -83,15 +80,19 @@ public class ContactRecord implements Record {
 	@Override
 	public String getSecondaryLabel() {
 		// If there is no mobile, display email instead. Else nothing ("").
-		return mobilePh.getValue().number.equals("") ? email.getValue().getEmail()
-				: mobilePh.getValue().number;
+		return mobilePh.getValue().number.equals("") ? email.getValue()
+				.getEmail() : mobilePh.getValue().number;
 	}
 
 	@Override
 	public BufferedImage getMainImage() {
-		System.out.println(Math.random());
 		return picture.getValue().img != null ? picture.getValue().img
-				:(Math.random()>0.5)? defaultImg1 : defaultImg2;
+				: defaultImg;
+	}
+	
+	@Override
+	public void setMainImage(String path) throws IOException {
+		picture.getValue().loadImage(path);
 	}
 
 	@Override
@@ -105,47 +106,49 @@ public class ContactRecord implements Record {
 	}
 
 	@Override
-	public void Save() throws IOException {
+	public void Save() throws Exception {
 		RecordFactory.instance().removeRecord(this);
 		RecordFactory.instance().addRecord(this);
 		this.setNeedsSave(false);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void importItem(String itemXML) throws Exception {
 		allItems = new ArrayList<DataItem<? extends DataItemValue>>();
 		String[] dataItems = itemXML.split("" + '\n');
 		for (String item : dataItems) {
-			Class valueClass = Class.forName(
-					RecordFactory.getFirstTag(item).substring(6));
+			Class valueClass = Class.forName(RecordFactory.getFirstTag(item)
+					.substring(6));
 			DataItemValue value = (DataItemValue) valueClass.newInstance();
 			String innerData = RecordFactory.getTagValue(item);
-			value.ImportXMLData(innerData.substring(innerData.indexOf('\1')+1));
-			String label = innerData.substring(0,innerData.indexOf('\1'));
-			DataItem<?> dataItem = new DataItem<DataItemValue>(label,value);
+			value.ImportXMLData(innerData.substring(innerData.indexOf('\1') + 1));
+			String label = innerData.substring(0, innerData.indexOf('\1'));
+			DataItem<?> dataItem = new DataItem<DataItemValue>(label, value);
 			allItems.add(dataItem);
-			if(valueClass == ContactName.class && label.equals(NAME))
-				name = (DataItem<ContactName>)dataItem;
-			if(valueClass == DisplayPicture.class && label.equals(PICTURE))
-				picture = (DataItem<DisplayPicture>)dataItem;
-			if(valueClass == PhoneNumber.class && label.equals(MOBILEPH))
-				mobilePh = (DataItem<PhoneNumber>)dataItem;
-			if(valueClass == Email.class && label.equals(EMAIL))
-				email = (DataItem<Email>)dataItem;
+			if (valueClass == ContactName.class && label.equals(NAME))
+				name = (DataItem<ContactName>) dataItem;
+			if (valueClass == DisplayPicture.class && label.equals(PICTURE))
+				picture = (DataItem<DisplayPicture>) dataItem;
+			if (valueClass == PhoneNumber.class && label.equals(MOBILEPH))
+				mobilePh = (DataItem<PhoneNumber>) dataItem;
+			if (valueClass == Email.class && label.equals(EMAIL))
+				email = (DataItem<Email>) dataItem;
 		}
 	}
 
 	@Override
 	public String exportData() {
 		StringBuilder xml = new StringBuilder();
-		xml.append(startXML(RecordFactory.RECORD+" "+this.getClass().toString()) + getID() + '\n');
+		xml.append(startXML(RecordFactory.RECORD + " "
+				+ this.getClass().toString())
+				+ getID() + '\n');
 		xml.append(exportInnerData());
 		xml.append(endXML(RecordFactory.RECORD));
 		return xml.toString();
 	}
-	
-	private String exportInnerData(){
+
+	private String exportInnerData() {
 		StringBuilder xml = new StringBuilder();
 		for (DataItem<? extends DataItemValue> attr : getItems()) {
 			xml.append(startXML(attr.getValue().getClass().toString()));
@@ -169,8 +172,8 @@ public class ContactRecord implements Record {
 	public boolean needsSave() {
 		return needsSave;
 	}
-	
-	public void setNeedsSave(boolean needsSave){
+
+	public void setNeedsSave(boolean needsSave) {
 		this.needsSave = needsSave;
 	}
 
@@ -186,4 +189,6 @@ public class ContactRecord implements Record {
 	public int compareTo(Record arg0) {
 		return getMainLabel().compareTo(arg0.getMainLabel());
 	}
+
+	
 }

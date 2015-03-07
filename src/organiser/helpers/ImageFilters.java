@@ -82,9 +82,9 @@ public class ImageFilters {
 		return image
 				.getSubimage(
 						image.getWidth() > image.getHeight() ? (image
-								.getWidth() - image.getHeight()) / 2 : (image
-								.getHeight() - image.getWidth()) / 2,
-						0,
+								.getWidth() - image.getHeight()) / 2 : 0,
+						image.getWidth() < image.getHeight() ? (image
+								.getHeight() - image.getWidth()) / 2 : 0,
 						image.getWidth() > image.getHeight() ? image
 								.getHeight() : image.getWidth(),
 						image.getWidth() > image.getHeight() ? image

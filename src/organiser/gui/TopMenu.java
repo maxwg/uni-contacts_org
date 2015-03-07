@@ -23,18 +23,18 @@ public class TopMenu extends JPanel implements Resizable {
 	JFrame frame;
 	GUI gui;
 	int sx, sy;
+	JButton exit;
 
 	public TopMenu(JFrame window, GUI main) throws FontFormatException, IOException {
 		super(null);
 		this.frame = window;
 		this.gui = main;
 		this.setBackground(new Color(42, 42, 42));
-		manageResize();
 		addDragListeners();
 
-		JButton exit = new ModernButton("Exit", 60, HEIGHT,
+		exit = new ModernButton("Exit", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException {
+					public Object call() throws Exception {
 						if (!(gui.showSaveDialog() == JOptionPane.CANCEL_OPTION))
 							System.exit(0);
 						return null;
@@ -42,7 +42,7 @@ public class TopMenu extends JPanel implements Resizable {
 				});
 		JButton save = new ModernButton("Save", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException {
+					public Object call() throws Exception {
 						gui.saveCurrentRecord();
 						gui.refreshRecordDisplay();
 						return null;
@@ -51,27 +51,21 @@ public class TopMenu extends JPanel implements Resizable {
 		save.setLocation(60, 0);
 		JButton add = new ModernButton("Add", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException,
-							NoSuchFieldException, SecurityException,
-							IllegalArgumentException, IllegalAccessException,
-							FontFormatException {
+					public Object call() throws Exception {
 						gui.showSaveDialog();
 						gui.addNewRecord();
 						return null;
 					}
 				});
-		add.setLocation(120, 0);
+		add.setLocation(0, 0);
 		JButton remove = new ModernButton("Remove", 60, HEIGHT,
 				new Callable<Object>() {
-					public Object call() throws IOException,
-							NoSuchFieldException, SecurityException,
-							IllegalArgumentException, IllegalAccessException,
-							FontFormatException {
+					public Object call() throws Exception {
 						gui.deleteCurrentRecord();
 						return null;
 					}
 				});
-		remove.setLocation(180, 0);
+		remove.setLocation(120, 0);
 		JButton undo = new ModernButton("Undo", 60, HEIGHT,
 				new Callable<Object>() {
 					public Object call() throws Exception {
@@ -82,7 +76,7 @@ public class TopMenu extends JPanel implements Resizable {
 						return null;
 					}
 				});
-		undo.setLocation(240, 0);
+		undo.setLocation(180, 0);
 		this.add(add);
 		this.add(remove);
 		this.add(undo);
@@ -92,7 +86,7 @@ public class TopMenu extends JPanel implements Resizable {
 
 	@Override
 	public void manageResize() {
-		this.setSize(1200, HEIGHT);
+		exit.setLocation(this.getWidth()-exit.getWidth(), 0);
 	}
 
 	private void addDragListeners() {

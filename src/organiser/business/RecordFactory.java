@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JOptionPane;
+
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -24,35 +26,19 @@ public class RecordFactory {
 	private static final int NONE = 0;
 	private static final int INRECORD = 1;
 	public static final String RECORD = "Record";
-	private static final String DBLOC = "data/contacts";
+	public static final String DBLOC = "data/contacts";
 
 	private static RecordFactory instance;
 	List<Record> records;
 	File data;
 
-	public RecordFactory() {
+	public RecordFactory() throws Exception {
 		data = new File(DBLOC);
-		try {
-			initializeXMLDBIfNeeded();
-			importXMLDB();
-		} catch (IOException e) {
-			System.err.println("CANNOT ESTABLISH DATABASE!");
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (StringIndexOutOfBoundsException e) {
-			System.err.println("DATABASE MAY BE CORRUPT!");
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (Exception e) {
-			System.err
-					.println("SOMETHING ELSE WENT WRONG - LIKELY FROM DB CORRUPTION!");
-			e.printStackTrace();
-		}
+		initializeXMLDBIfNeeded();
+		importXMLDB();
 	}
 
-	public static RecordFactory instance() {
+	public static RecordFactory instance() throws Exception {
 		if (instance == null) {
 			instance = new RecordFactory();
 		}
@@ -74,8 +60,9 @@ public class RecordFactory {
 		while ((line = reader.readLine()) != null) {
 			if (line != ""
 					&& getFirstTag(line).startsWith(RECORD)
-					&& record.getID().equals(UUID.fromString(line.substring(line
-							.indexOf('>') + 1)))) {
+					&& record.getID()
+							.equals(UUID.fromString(line.substring(line
+									.indexOf('>') + 1)))) {
 				write = false;
 			} else {
 				if (write)
@@ -87,7 +74,11 @@ public class RecordFactory {
 		reader.close();
 		writer.flush();
 		writer.close();
-		File databak = new File(DBLOC+"bak/"+(new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss").format(new Date())));
+		File databak = new File(
+				DBLOC
+						+ "bak/"
+						+ (new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss")
+								.format(new Date())));
 		databak.getParentFile().mkdirs();
 		databak.createNewFile();
 		data.renameTo(databak);

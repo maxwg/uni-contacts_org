@@ -6,11 +6,8 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 import organiser.business.Record;
 import organiser.business.RecordFactory;
-import organiser.contact.ContactRecord;
+import organiser.business.contact.ContactRecord;
 import organiser.modernUIElements.ModernScrollPane;
 
 public class GUI implements Runnable, Resizable {
@@ -63,8 +60,42 @@ public class GUI implements Runnable, Resizable {
 			topMenu = new TopMenu(frame, this);
 			renderRecords();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			int opt = JOptionPane
+					.showConfirmDialog(
+							null,
+							"Unable to import records! Database may be corrupt!\n\nWould you like to reset the database? (Warning: This will clear all data!)\n\n\nMore info: "
+									+ e.getClass() + ": " + e.getMessage(),
+									"Unable to load Database", JOptionPane.YES_NO_OPTION);
+			if(opt == JOptionPane.YES_OPTION){
+				try {
+					File f = new File(RecordFactory.DBLOC);
+					f.delete();
+					f.createNewFile();
+				} catch (Exception e1) {
+					System.err.println("It seems that a broken DB wasn't the problem!");
+					e1.printStackTrace();
+				}
+			}
+			else{
+				opt = JOptionPane
+						.showConfirmDialog(
+								null,
+								"Would you like to try manually fixing the error?\n\nMore info:"
+										+ e.getClass() + ": " + e.getMessage(),
+										"Unable to load Database", JOptionPane.YES_NO_OPTION);
+				if(opt == JOptionPane.YES_OPTION){
+					try {
+						Runtime.getRuntime().exec("gedit "+RecordFactory.DBLOC);
+						Runtime.getRuntime().exec("notepad.exe "+RecordFactory.DBLOC);
+					} catch (IOException e1) {
+						// Currently supports only Windows and linux versions with gedit.
+						// Ignore error - Really, we could check what OS user is using,
+						// but this is endgame anyways. The user can figure out a 
+						// better XML editor themselves.
+					}
+				}
+				System.exit(-1);
+			}
 		}
 
 		frame.getContentPane().add(contactsPaneScroll);
@@ -77,9 +108,7 @@ public class GUI implements Runnable, Resizable {
 		manageResize();
 	}
 
-	private void renderRecords() throws FontFormatException, IOException,
-			NoSuchFieldException, SecurityException, IllegalArgumentException,
-			IllegalAccessException {
+	private void renderRecords() throws Exception {
 		loadedRecords = new ArrayList<RecordPaneItem>();
 		deletedRecords = new ArrayList<RecordPaneItem>();
 
@@ -88,9 +117,7 @@ public class GUI implements Runnable, Resizable {
 		}
 	}
 
-	public void addNewRecord() throws IOException, NoSuchFieldException,
-			SecurityException, IllegalArgumentException,
-			IllegalAccessException, FontFormatException {
+	public void addNewRecord() throws Exception {
 		ContactRecord r = new ContactRecord();
 		r.name.getValue().given = "New";
 		r.name.getValue().surname = "Person";
@@ -98,9 +125,7 @@ public class GUI implements Runnable, Resizable {
 		detailsPane.loadRecord(addToContactsPane(r, true));
 	}
 
-	public void undoRecordDelete() throws NoSuchFieldException,
-			SecurityException, IllegalArgumentException,
-			IllegalAccessException, FontFormatException, IOException {
+	public void undoRecordDelete() throws Exception {
 		showSaveDialog();
 		if (deletedRecords.size() > 0) {
 			RecordPaneItem recovered = deletedRecords
@@ -134,9 +159,7 @@ public class GUI implements Runnable, Resizable {
 		return tag;
 	}
 
-	public void deleteCurrentRecord() throws IOException, NoSuchFieldException,
-			SecurityException, IllegalArgumentException,
-			IllegalAccessException, FontFormatException {
+	public void deleteCurrentRecord() throws Exception {
 		RecordFactory.instance().removeRecord(selectedRecord.curRecord);
 		int rpos = contactsPane.items.indexOf(selectedRecord);
 		contactsPane.items.remove(rpos);
@@ -162,12 +185,12 @@ public class GUI implements Runnable, Resizable {
 		return false;
 	}
 
-	public void saveCurrentRecord() throws IOException {
+	public void saveCurrentRecord() throws Exception {
 		if (selectedRecord != null)
 			selectedRecord.curRecord.Save();
 	}
 
-	public int showSaveDialog() throws IOException {
+	public int showSaveDialog() throws Exception {
 		if (currentRecordNeedsSave()) {
 			int option = JOptionPane.showConfirmDialog(selectedRecord,
 					"MATE YOU HAVENT SAVED. SAVE NOW?");
@@ -191,10 +214,14 @@ public class GUI implements Runnable, Resizable {
 	public void manageResize() {
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
-		contactsPane.setSize(new Dimension(Math.max(56,Math.min(264, frameWidth -424)),
-				frameHeight - TopMenu.HEIGHT));
-		contactsPaneScroll.setSize(new Dimension(Math.max(56,Math.min(264, frameWidth -424)),
-				frameHeight - TopMenu.HEIGHT));
+		contactsPane
+				.setSize(new Dimension(Math.max(56,
+						Math.min(264, frameWidth - 424)), frameHeight
+						- TopMenu.HEIGHT));
+		contactsPaneScroll
+				.setSize(new Dimension(Math.max(56,
+						Math.min(264, frameWidth - 424)), frameHeight
+						- TopMenu.HEIGHT));
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),
 				frameHeight - TopMenu.HEIGHT));
@@ -202,5 +229,7 @@ public class GUI implements Runnable, Resizable {
 				- contactsPane.getWidth(), frameHeight - TopMenu.HEIGHT));
 		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(),
 				TopMenu.HEIGHT));
+		topMenu.setSize(frameWidth, topMenu.HEIGHT);
+		topMenu.manageResize();
 	}
 }
