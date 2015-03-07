@@ -107,7 +107,7 @@
 <class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
 </Record>
 <Record class organiser.business.contact.ContactRecord>9bf6f7e5-169b-4406-a5e7-4f9bbcaedcd3
-<class organiser.business.contact.ContactName>NameRaydn$wag</class organiser.business.contact.ContactName>
+<class organiser.business.contact.ContactName>NameRaydnGray</class organiser.business.contact.ContactName>
 <class organiser.business.DisplayPicture>Picturedata/cache/9bf6f7e5-169b-4406-a5e7-4f9bbcaedcd3.jpg</class organiser.business.DisplayPicture>
 <class organiser.business.contact.PhoneNumber>Mobile041512332</class organiser.business.contact.PhoneNumber>
 <class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
