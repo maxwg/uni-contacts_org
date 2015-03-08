@@ -52,7 +52,7 @@ public class FileHelpers {
 		if(imgFile== null)
 			return "";
 		BufferedImage image = ImageIO.read(imgFile);
-		image = ImageFilters.resizeImage(image, 200);
+		image = ImageFilters.resizeImage(image, 290);
 		File cacheFile = newCacheFile(name+".jpg");
 		ImageIO.write(image, "jpg", cacheFile);
 		return cacheFile.getPath();

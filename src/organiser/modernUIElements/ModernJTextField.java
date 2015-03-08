@@ -17,11 +17,12 @@ import organiser.business.DataItemValue;
 
 public class ModernJTextField extends JTextField {
 	private static final long serialVersionUID = 4159783237856056109L;
-	private static final char[] illegalCharacters = {'\1', '<', '>'};
+	private static final char[] illegalCharacters = { '\1', '<', '>' };
+
 	public ModernJTextField(final DataItemValue item, final Field field,
 			int width) throws FontFormatException, IOException,
 			IllegalArgumentException, IllegalAccessException {
-		this(width);
+		this(width, 1024);
 		this.setText((String) field.get(item));
 		this.addKeyListener(new KeyListener() {
 			@Override
@@ -32,9 +33,9 @@ public class ModernJTextField extends JTextField {
 			public void keyReleased(KeyEvent arg0) {
 				try {
 					boolean charIsIllegal = false;
-					for(char c : illegalCharacters){
-						if(c == arg0.getKeyChar())
-							setText(getText().replace(c+"", ""));
+					for (char c : illegalCharacters) {
+						if (c == arg0.getKeyChar())
+							setText(getText().replace(c + "", ""));
 					}
 					if (!charIsIllegal)
 						field.set(item, getText());
@@ -54,7 +55,8 @@ public class ModernJTextField extends JTextField {
 		});
 	}
 
-	public ModernJTextField(int width) throws FontFormatException, IOException {
+	public ModernJTextField(int width, final int charLim)
+			throws FontFormatException, IOException {
 		super();
 		this.setBackground(new Color(192, 192, 192));
 		this.setForeground(new Color(48, 48, 64));
@@ -64,5 +66,25 @@ public class ModernJTextField extends JTextField {
 				new File("src/organiser/res/fonts/OpenSans-Regular.ttf"))
 				.deriveFont(15f));
 		this.setBorder(BorderFactory.createEmptyBorder());
+		this.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if (getText().length() > charLim)
+					setText(getText().substring(0, charLim));
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 }

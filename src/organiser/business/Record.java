@@ -2,12 +2,13 @@ package organiser.business;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public interface Record extends Comparable<Record>{	
 	public UUID getID();	
 	public void setID(UUID id);
-	public Iterable<DataItem<? extends DataItemValue>> getItems();
+	public List<DataItem<? extends DataItemValue>> getItems();
 	public String getMainLabel();
 	public String getSecondaryLabel();
 	public BufferedImage getMainImage();

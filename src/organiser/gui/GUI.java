@@ -19,6 +19,7 @@ import organiser.business.Record;
 import organiser.business.RecordFactory;
 import organiser.business.contact.ContactRecord;
 import organiser.modernUIElements.ModernScrollPane;
+import sun.awt.RepaintArea;
 
 public class GUI implements Runnable, Resizable {
 	JFrame frame;
@@ -212,15 +213,16 @@ public class GUI implements Runnable, Resizable {
 	}
 
 	public void manageResize() {
+		System.out.println("RESIZE");
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
 		contactsPane
 				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 430)), frameHeight
+						Math.min(264, frameWidth - 458)), frameHeight
 						- TopMenu.HEIGHT));
 		contactsPaneScroll
 				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 430)), frameHeight
+						Math.min(264, frameWidth - 458)), frameHeight
 						- TopMenu.HEIGHT));
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),
@@ -230,6 +232,6 @@ public class GUI implements Runnable, Resizable {
 		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(),
 				TopMenu.HEIGHT));
 		topMenu.setSize(frameWidth, topMenu.HEIGHT);
-		topMenu.manageResize();
+		topMenu.manageResize();		
 	}
 }

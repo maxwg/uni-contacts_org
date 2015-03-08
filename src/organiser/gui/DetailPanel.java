@@ -11,17 +11,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
 import organiser.business.Record;
+import organiser.business.RecordTypes;
 import organiser.helpers.FileHelpers;
 import organiser.helpers.ImageFilters;
+import organiser.modernUIElements.ModernButton;
+import organiser.modernUIElements.ModernJTextField;
 import organiser.modernUIElements.OJLabel;
 
 public class DetailPanel extends JPanel implements Resizable {
@@ -39,6 +45,7 @@ public class DetailPanel extends JPanel implements Resizable {
 	JLabel bg;
 	int curPos;
 	GUI gui;
+	ModernButton newRecordButton;
 
 	public DetailPanel(GUI mainWindow) {
 		super(null);
@@ -93,7 +100,8 @@ public class DetailPanel extends JPanel implements Resizable {
 			this.remove(c);
 		labels = new ArrayList<Component>();
 		fields = new ArrayList<JPanel>();
-		for (DataItem<? extends DataItemValue> item : r.curRecord.getItems()) {
+		for (final DataItem<? extends DataItemValue> item : r.curRecord
+				.getItems()) {
 			JPanel field = item.getValue().Display();
 			if (field != null) {
 				OJLabel itemLabel = new OJLabel(item.getLabel(), 24,
@@ -108,10 +116,28 @@ public class DetailPanel extends JPanel implements Resizable {
 				field.setLocation(128, curPos);
 				fields.add(field);
 				this.add(field);
+				
+				if (!RecordTypes.importantFields.contains(item.getLabel())) {
+					ModernButton rmBtn = new ModernButton("-", 24, 24,
+							new Callable<Object>() {
+								@Override
+								public Object call() throws Exception {
+									curRecord.getItems().remove(item);
+									loadRecord(gui.selectedRecord);
+									refreshPanel(true);
+									return null;
+								}
+							});
+					rmBtn.setLocation(428, curPos);
+					labels.add(rmBtn);
+					this.add(rmBtn);
+				}
+
 				curPos += field.getHeight() + 6;
 			}
 		}
 		r.updateImage(r.curImg, true);
+		addNewRecordButton();
 		refreshPanel(false);
 	}
 
@@ -122,7 +148,13 @@ public class DetailPanel extends JPanel implements Resizable {
 		if (needsSave)
 			curRecord.setNeedsSave(true);
 		repaint();
-		manageResize();
+		gui.frame.setSize(gui.frame.getWidth(), gui.frame.getHeight() + 1);
+		gui.frame.setSize(gui.frame.getWidth(), gui.frame.getHeight() - 1); // hack
+																			// -
+																			// swing
+																			// is
+																			// messed
+																			// up...
 	}
 
 	void setCaption(String text) {
@@ -172,6 +204,50 @@ public class DetailPanel extends JPanel implements Resizable {
 		});
 	}
 
+	private void addNewRecordButton() throws FontFormatException, IOException {
+		if (newRecordButton == null) {
+			newRecordButton = new ModernButton("Add New Record", 120, 28,
+					new Callable<Object>() {
+						@Override
+						public Object call() throws Exception {
+							Class classChoice = (Class) JOptionPane
+									.showInputDialog(
+											null,
+											"What type of field would you like to add?\n",
+											"Select Field Type",
+											JOptionPane.QUESTION_MESSAGE, null,
+											RecordTypes.types,
+											RecordTypes.types[0]);
+							ModernJTextField tf = new ModernJTextField(100, 9);
+							int opt = JOptionPane.CANCEL_OPTION;
+							if (classChoice != null)
+								opt = JOptionPane
+										.showConfirmDialog(
+												null,
+												new Object[] {
+														"What would you like to label this as? ",
+														tf }, "Enter Label",
+												JOptionPane.OK_CANCEL_OPTION,
+												JOptionPane.PLAIN_MESSAGE);
+							if (classChoice != null
+									&& opt == JOptionPane.OK_OPTION) {
+								DataItemValue classInst = (DataItemValue) classChoice
+										.newInstance();
+								curRecord.getItems().add(
+										new DataItem<DataItemValue>(tf
+												.getText(), classInst));
+								loadRecord(gui.selectedRecord);
+								refreshPanel(true);
+							}
+							return null;
+						}
+					});
+			this.add(newRecordButton);
+		}
+		newRecordButton.setLocation(300, curPos);
+		curPos += newRecordButton.getHeight() + 6;
+	}
+
 	@Override
 	public void manageResize() {
 		this.setPreferredSize(new Dimension(this.getWidth(), curPos));
@@ -183,5 +259,6 @@ public class DetailPanel extends JPanel implements Resizable {
 		bg.setSize(this.getWidth(),
 				this.getHeight() > curPos ? this.getHeight() : curPos);
 		this.add(bg);
+		System.out.println("DETAIL RESIZE, " + curPos);
 	}
 }

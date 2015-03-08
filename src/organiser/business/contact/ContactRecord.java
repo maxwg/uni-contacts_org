@@ -4,19 +4,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
-import organiser.business.DisplayPicture;
+import organiser.business.DisplayPictureEmpty;
 import organiser.business.Record;
 import organiser.business.RecordFactory;
 
 public class ContactRecord implements Record {
 	public static final String NAME = "Name";
-	public static final String PICTURE = "Picture";
+	public static final String PICTURE = "MainDisplayPictureImage";
 	public static final String MOBILEPH = "Mobile";
 	public static final String HOMEPH = "Home Ph";
 	public static final String WORKPH = "Work Ph";
@@ -34,7 +35,7 @@ public class ContactRecord implements Record {
 	}
 
 	public DataItem<ContactName> name;
-	public DataItem<DisplayPicture> picture;
+	public DataItem<DisplayPictureEmpty> picture;
 	public DataItem<PhoneNumber> homePh;
 	public DataItem<PhoneNumber> workPh;
 	public DataItem<PhoneNumber> mobilePh;
@@ -48,26 +49,26 @@ public class ContactRecord implements Record {
 	public ContactRecord() {
 		id = UUID.randomUUID();
 		name = new DataItem<ContactName>(NAME, new ContactName());
-		picture = new DataItem<DisplayPicture>(PICTURE, new DisplayPicture());
 		mobilePh = new DataItem<PhoneNumber>(MOBILEPH, new PhoneNumber());
 		homePh = new DataItem<PhoneNumber>(HOMEPH, new PhoneNumber());
 		workPh = new DataItem<PhoneNumber>(WORKPH, new PhoneNumber());
 		email = new DataItem<Email>(EMAIL, new Email());
 		homeAddress = new DataItem<Address>(ADDRESS, new Address());
+		picture = new DataItem<DisplayPictureEmpty>(PICTURE, new DisplayPictureEmpty());
 		needsSave = false;
 	}
 
 	@Override
-	public Iterable<DataItem<? extends DataItemValue>> getItems() {
+	public List<DataItem<? extends DataItemValue>> getItems() {
 		if (allItems == null) {
 			allItems = new ArrayList<DataItem<? extends DataItemValue>>();
 			allItems.add(name);
-			allItems.add(picture);
 			allItems.add(mobilePh);
 			allItems.add(homePh);
 			allItems.add(workPh);
 			allItems.add(email);
 			allItems.add(homeAddress);
+			allItems.add(picture);
 		}
 		return allItems;
 	}
@@ -128,8 +129,8 @@ public class ContactRecord implements Record {
 			allItems.add(dataItem);
 			if (valueClass == ContactName.class && label.equals(NAME))
 				name = (DataItem<ContactName>) dataItem;
-			if (valueClass == DisplayPicture.class && label.equals(PICTURE))
-				picture = (DataItem<DisplayPicture>) dataItem;
+			if (valueClass == DisplayPictureEmpty.class && label.equals(PICTURE))
+				picture = (DataItem<DisplayPictureEmpty>) dataItem;
 			if (valueClass == PhoneNumber.class && label.equals(MOBILEPH))
 				mobilePh = (DataItem<PhoneNumber>) dataItem;
 			if (valueClass == Email.class && label.equals(EMAIL))

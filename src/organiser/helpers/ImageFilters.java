@@ -51,6 +51,17 @@ public class ImageFilters {
 		g.dispose();
 		return rtn;
 	}
+	
+	public static BufferedImage resizeWidthOnly(BufferedImage img, int width) {
+		int rsWidth = width;
+		int rsHeight = (int)((double)img.getHeight()/(double)img.getWidth()*width);
+		BufferedImage rtn = new BufferedImage(rsWidth, rsHeight,
+				BufferedImage.TYPE_INT_RGB);
+		Graphics g = rtn.createGraphics();
+		g.drawImage(img, 0, 0, rsWidth, rsHeight, null);
+		g.dispose();
+		return rtn;
+	}
 
 	public static BufferedImage blurImage(BufferedImage image, int radius) {
 		(new BoxBlurFilter(radius, radius, 1)).filter(image, image);
