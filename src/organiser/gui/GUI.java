@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import organiser.business.Record;
 import organiser.business.RecordFactory;
 import organiser.business.contact.ContactRecord;
+import organiser.helpers.FileHelpers;
 import organiser.modernUIElements.ModernScrollPane;
 import sun.awt.RepaintArea;
 
@@ -45,7 +46,7 @@ public class GUI implements Runnable, Resizable {
 		Rectangle screenSize = GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		screenSize.height = screenSize.height > 660 ? 660 : screenSize.height;
-		screenSize.width = screenSize.width > 750 ? 750 : screenSize.width;
+		screenSize.width = screenSize.width > 768 ? 768 : screenSize.width;
 		frame.setPreferredSize(new Dimension(screenSize.width,
 				screenSize.height));
 		frame.pack();
@@ -61,42 +62,7 @@ public class GUI implements Runnable, Resizable {
 			topMenu = new TopMenu(frame, this);
 			renderRecords();
 		} catch (Exception e) {
-			int opt = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Unable to import records! Database may be corrupt!\n\nWould you like to reset the database? (Warning: This will clear all data!)\n\n\nMore info: "
-									+ e.getClass() + ": " + e.getMessage(),
-									"Unable to load Database", JOptionPane.YES_NO_OPTION);
-			if(opt == JOptionPane.YES_OPTION){
-				try {
-					File f = new File(RecordFactory.DBLOC);
-					f.delete();
-					f.createNewFile();
-				} catch (Exception e1) {
-					System.err.println("It seems that a broken DB wasn't the problem!");
-					e1.printStackTrace();
-				}
-			}
-			else{
-				opt = JOptionPane
-						.showConfirmDialog(
-								null,
-								"Would you like to try manually fixing the error?\n\nMore info:"
-										+ e.getClass() + ": " + e.getMessage(),
-										"Unable to load Database", JOptionPane.YES_NO_OPTION);
-				if(opt == JOptionPane.YES_OPTION){
-					try {
-						Runtime.getRuntime().exec("gedit "+RecordFactory.DBLOC);
-						Runtime.getRuntime().exec("notepad.exe "+RecordFactory.DBLOC);
-					} catch (IOException e1) {
-						// Currently supports only Windows and linux versions with gedit.
-						// Ignore error - Really, we could check what OS user is using,
-						// but this is endgame anyways. The user can figure out a 
-						// better XML editor themselves.
-					}
-				}
-				System.exit(-1);
-			}
+			handleCorruptDatabase(e);
 		}
 
 		frame.getContentPane().add(contactsPaneScroll);
@@ -125,7 +91,10 @@ public class GUI implements Runnable, Resizable {
 		r.Save();
 		detailsPane.loadRecord(addToContactsPane(r, true));
 	}
-
+	
+	/**
+	 * Restores previously deleted record
+	 */
 	public void undoRecordDelete() throws Exception {
 		showSaveDialog();
 		if (deletedRecords.size() > 0) {
@@ -140,13 +109,26 @@ public class GUI implements Runnable, Resizable {
 		}
 	}
 
+	/**
+	 * Undo's the changes made the the current record by the user.
+	 */
 	public void undoRecordChanges() throws Exception {
-		System.out.println("YEA");
 		this.selectedRecord.curRecord = curRecordCache.deepCopy();
 		this.detailsPane.loadRecord(this.selectedRecord);
 		this.detailsPane.refreshPanel(false);
 	}
 
+	/**
+	 * Creates and adds a recordpane item - the item seen on the side panel.
+	 * 
+	 * @param r
+	 *            - the record to add
+	 * @param select
+	 *            - Select the record as well? i.e, adding it will load the
+	 *            record and display it to the user.
+	 * @return the panel item - this does not neccessarily have to be used but
+	 *         can be for the purposes of modification.
+	 */
 	public RecordPaneItem addToContactsPane(Record r, boolean select)
 			throws NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException,
@@ -213,25 +195,90 @@ public class GUI implements Runnable, Resizable {
 	}
 
 	public void manageResize() {
-		System.out.println("RESIZE");
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
-		contactsPane
-				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 458)), frameHeight
-						- TopMenu.HEIGHT));
-		contactsPaneScroll
-				.setSize(new Dimension(Math.max(56,
-						Math.min(264, frameWidth - 458)), frameHeight
-						- TopMenu.HEIGHT));
+		Dimension cpSize = new Dimension(Math.max(
+				frameHeight > contactsPane.getHeight() ? 56 : 63,
+				Math.min(264, frameWidth - 460)), frameHeight - TopMenu.HEIGHT);
+		contactsPane.setPreferredSize(cpSize);
+		contactsPaneScroll.setSize(cpSize);
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
-		detailsPane.setSize(new Dimension(frameWidth - contactsPane.getWidth(),
-				frameHeight - TopMenu.HEIGHT));
 		detailsPaneScroll.setSize(new Dimension(frameWidth
-				- contactsPane.getWidth(), frameHeight - TopMenu.HEIGHT));
-		detailsPaneScroll.setLocation(new Point(contactsPane.getWidth(),
-				TopMenu.HEIGHT));
+				- contactsPane.getPreferredSize().width, frameHeight
+				- TopMenu.HEIGHT));
+		detailsPaneScroll.setLocation(new Point(
+				contactsPane.getPreferredSize().width, TopMenu.HEIGHT));
 		topMenu.setSize(frameWidth, topMenu.HEIGHT);
-		topMenu.manageResize();		
+		topMenu.manageResize();
+	}
+
+	/**
+	 * Provides the user 3 options - restore from backup, clear database, and
+	 * manual repair.
+	 * 
+	 * @param e
+	 *            - the exception for message displaying purposes
+	 */
+	private void handleCorruptDatabase(Exception e) {
+		File bak = null;
+		int opt = JOptionPane
+				.showConfirmDialog(
+						null,
+						"Unable to import records! Would you like to restore from a backup?",
+						"Unable to load Database", JOptionPane.YES_NO_OPTION);
+		if (opt == JOptionPane.YES_OPTION) {
+			bak = FileHelpers.showFileDialog(false, RecordFactory.BAKLOC);
+			if (bak != null) {
+				File f = new File(RecordFactory.DBLOC);
+				bak.renameTo(f);
+				frame.dispose();
+				run();
+			}
+		}
+		if (bak == null) {
+			opt = JOptionPane
+					.showConfirmDialog(
+							null,
+							"Unable to import records! Database may be corrupt!\n\nWould you like to reset the database? (Warning: This will clear all data!)\n\n\nMore info: "
+									+ e.getClass() + ": " + e.getMessage(),
+							"Unable to load Database",
+							JOptionPane.YES_NO_OPTION);
+			if (opt == JOptionPane.YES_OPTION) {
+				try {
+					File f = new File(RecordFactory.DBLOC);
+					f.delete();
+					f.createNewFile();
+				} catch (Exception e1) {
+					System.err
+							.println("It seems that a broken DB wasn't the problem!");
+					e1.printStackTrace();
+				}
+			} else {
+				opt = JOptionPane.showConfirmDialog(null,
+						"Would you like to try manually fixing the error?\n\nMore info:"
+								+ e.getClass() + ": " + e.getMessage(),
+						"Unable to load Database", JOptionPane.YES_NO_OPTION);
+				if (opt == JOptionPane.YES_OPTION) {
+					try {
+						Runtime.getRuntime().exec(
+								"gedit " + RecordFactory.DBLOC);
+						Runtime.getRuntime().exec(
+								"notepad.exe " + RecordFactory.DBLOC);
+					} catch (IOException e1) {
+						/*
+						 * Currently supports windows and linux only. Ignore
+						 * error - we could have checked what OS the user is
+						 * using, and openend an appropriate XML editor but that
+						 * is too complex for what it is. The user can locate
+						 * the XML editor themselves. There is a Desktop
+						 * framework, however the .edit() does not appear to
+						 * work on Ubuntu. Other frameworks are too. Do not have
+						 * a mac to test on and as such cannot support.
+						 */
+					}
+				}
+				System.exit(-1);
+			}
+		}
 	}
 }

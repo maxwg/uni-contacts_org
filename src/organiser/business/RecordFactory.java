@@ -27,6 +27,7 @@ public class RecordFactory {
 	private static final int INRECORD = 1;
 	public static final String RECORD = "Record";
 	public static final String DBLOC = "data/contacts";
+	public static final String BAKLOC = DBLOC+"bak";
 
 	private static RecordFactory instance;
 	List<Record> records;
@@ -75,8 +76,7 @@ public class RecordFactory {
 		writer.flush();
 		writer.close();
 		File databak = new File(
-				DBLOC
-						+ "bak/"
+				BAKLOC
 						+ (new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss")
 								.format(new Date())));
 		databak.getParentFile().mkdirs();

@@ -9,13 +9,27 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import organiser.business.RecordFactory;
+
 public class FileHelpers {
 
+	/**
+	 * Opens a file dialog, and prompts the user to choose a file.
+	 * @param showOnlyImagesObtain valid Java Swing image formats, and get the JFileChooser
+			 to display only them
+	 * @return File pointing to chosen file. null if no file is selected.
+	 */
 	public static File showFileDialog(boolean showOnlyImages) {
-		JFileChooser chooser = new JFileChooser();
+		return showFileDialog(showOnlyImages, null);
+	}
+	/**
+	 * 
+	 * @param loc - location of file to open
+	 * @return
+	 */
+	public static File showFileDialog(boolean showOnlyImages, String loc) {
+		JFileChooser chooser = new JFileChooser(loc);
 		if (showOnlyImages) {
-			// Obtain valid Java Swing image formats, and get the JFileChooser
-			// to display only them
 			String[] imgExts = ImageIO.getReaderFileSuffixes();
 			chooser.setAcceptAllFileFilterUsed(false);
 			for (int i = 0; i < imgExts.length; i++) {

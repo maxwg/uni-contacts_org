@@ -100,6 +100,7 @@ public class DetailPanel extends JPanel implements Resizable {
 			this.remove(c);
 		labels = new ArrayList<Component>();
 		fields = new ArrayList<JPanel>();
+		int ino=0;
 		for (final DataItem<? extends DataItemValue> item : r.curRecord
 				.getItems()) {
 			JPanel field = item.getValue().Display();
@@ -117,6 +118,8 @@ public class DetailPanel extends JPanel implements Resizable {
 				fields.add(field);
 				this.add(field);
 				
+				final int itemNo = ino;
+				
 				if (!RecordTypes.importantFields.contains(item.getLabel())) {
 					ModernButton rmBtn = new ModernButton("-", 24, 24,
 							new Callable<Object>() {
@@ -132,7 +135,38 @@ public class DetailPanel extends JPanel implements Resizable {
 					labels.add(rmBtn);
 					this.add(rmBtn);
 				}
-
+				
+				ModernButton upBtn = new ModernButton("▲", 24, 12,
+						new Callable<Object>() {
+							@Override
+							public Object call() throws Exception {
+								curRecord.getItems().remove(item);
+								curRecord.getItems().add(Math.max(0, itemNo-1), item);
+								loadRecord(gui.selectedRecord);
+								refreshPanel(true);
+								return null;
+							}
+						});
+				upBtn.setLocation(460, curPos);
+				labels.add(upBtn);
+				this.add(upBtn);
+				ModernButton downBtn = new ModernButton("▼", 24, 12,
+						new Callable<Object>() {
+							@Override
+							public Object call() throws Exception {
+								System.out.println(curRecord.getItems().size() + " : " + itemNo);
+								curRecord.getItems().remove(item);
+								curRecord.getItems().add(Math.min(curRecord.getItems().size()-1, itemNo+1), item);
+								loadRecord(gui.selectedRecord);
+								refreshPanel(true);
+								return null;
+							}
+						});
+				downBtn.setLocation(460, curPos+12);
+				labels.add(downBtn);
+				this.add(downBtn);
+				
+				ino++;
 				curPos += field.getHeight() + 6;
 			}
 		}
@@ -147,14 +181,15 @@ public class DetailPanel extends JPanel implements Resizable {
 			setImage(curRecord.getMainImage());
 		if (needsSave)
 			curRecord.setNeedsSave(true);
-		repaint();
+		
+		/*
+		 * hack as swing is messed up - calling manageResize will set the sizes,
+		 * but scrollbars will not be properly set. Resizing the window itself
+		 * seems to call some event which regenerates scrollbars.
+		 */
 		gui.frame.setSize(gui.frame.getWidth(), gui.frame.getHeight() + 1);
-		gui.frame.setSize(gui.frame.getWidth(), gui.frame.getHeight() - 1); // hack
-																			// -
-																			// swing
-																			// is
-																			// messed
-																			// up...
+		gui.frame.setSize(gui.frame.getWidth(), gui.frame.getHeight() - 1);
+		repaint();
 	}
 
 	void setCaption(String text) {
@@ -259,6 +294,5 @@ public class DetailPanel extends JPanel implements Resizable {
 		bg.setSize(this.getWidth(),
 				this.getHeight() > curPos ? this.getHeight() : curPos);
 		this.add(bg);
-		System.out.println("DETAIL RESIZE, " + curPos);
 	}
 }
