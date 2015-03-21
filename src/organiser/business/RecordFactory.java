@@ -29,12 +29,16 @@ public class RecordFactory {
 	public static final String DBLOC = "data/contacts";
 	public static final String BAKLOC = DBLOC+"bak";
 
-	private static RecordFactory instance;
-	List<Record> records;
-	File data;
+	protected static RecordFactory instance;
+	private List<Record> records;
+	protected File data;
+	protected String dbLoc;
+	protected String bakLoc;
 
 	public RecordFactory() throws Exception {
-		data = new File(DBLOC);
+		dbLoc = DBLOC;
+		bakLoc = BAKLOC;
+		data = new File(dbLoc);
 		initializeXMLDBIfNeeded();
 		importXMLDB();
 	}
@@ -76,13 +80,13 @@ public class RecordFactory {
 		writer.flush();
 		writer.close();
 		File databak = new File(
-				BAKLOC
+				bakLoc
 						+ (new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss")
 								.format(new Date())));
 		databak.getParentFile().mkdirs();
 		databak.createNewFile();
 		data.renameTo(databak);
-		tmp.renameTo(new File(DBLOC));
+		tmp.renameTo(new File(dbLoc));
 		records.remove(record);
 	}
 
@@ -93,7 +97,7 @@ public class RecordFactory {
 		writer.close();
 	}
 
-	private void initializeXMLDBIfNeeded() throws IOException {
+	protected void initializeXMLDBIfNeeded() throws IOException {
 		if (!data.exists()) {
 			data.getParentFile().mkdirs();
 			data.createNewFile();
@@ -101,14 +105,15 @@ public class RecordFactory {
 	}
 
 	/**
-	 * Uses reflection to dynamically instantiate the Record class - such that
-	 * recordFactory will work despite what types of records are used in the
+	 * Uses reflection to dynamically instantiate the Record class.
+	 * This allows RecordFactory to support any record type in the
 	 * future.
 	 * 
 	 * @throws Exception
 	 *             - Something went wrong with import - Corrupt DB likely
 	 */
-	private void importXMLDB() throws Exception {
+	protected void importXMLDB() throws Exception {
+		getRecords().clear();
 		BufferedReader br = new BufferedReader(new FileReader(data));
 		String line;
 		String data = "";

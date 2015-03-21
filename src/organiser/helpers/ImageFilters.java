@@ -29,7 +29,13 @@ public class ImageFilters {
 	}
 	private static final BoxBlurFilter DetailsBlurFilter = new BoxBlurFilter(
 			75, 75, 1);
-
+	
+	/**
+	 * Resize an image, constraining proportions
+	 * @param img - image to resize
+	 * @param maxSizeTo - (minimum width/height of images) in pixels
+	 * @return
+	 */
 	public static BufferedImage resizeImage(BufferedImage img, int maxSizeTo) {
 		int rsWidth = img.getWidth() < img.getHeight() ? maxSizeTo : maxSizeTo
 				* img.getWidth() / img.getHeight();
@@ -42,10 +48,17 @@ public class ImageFilters {
 		g.dispose();
 		return rtn;
 	}
-
+	
+	/**
+	 * Resize image without keeping proportions
+	 * @param img - bufferedimage
+	 * @param w - width
+	 * @param h - height
+	 * @return
+	 */
 	public static BufferedImage resizeImageWithoutScale(BufferedImage img,
 			int w, int h) {
-		BufferedImage rtn = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		BufferedImage rtn = new BufferedImage(w <= 0 ? 1 : w, h <=0 ? 1 : h, BufferedImage.TYPE_INT_RGB);
 		Graphics g = rtn.createGraphics();
 		g.drawImage(img, 0, 0, w, h, null);
 		g.dispose();

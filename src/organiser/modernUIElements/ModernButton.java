@@ -21,31 +21,52 @@ public class ModernButton extends JButton {
 	public static final Color NORMAL = new Color(24, 24, 24);
 	public static final Color OVER = new Color(42, 42, 42);
 	public static final Color PRESS = new Color(80, 80, 80);
-	
-	private Callable<?> func;
+	private static Font REGULAR;
+	private static Font LIGHT;
+	static {
+		try {
+			REGULAR = Font.createFont(Font.TRUETYPE_FONT, new File(
+					"src/organiser/res/fonts/OpenSans-Regular.ttf"));
+			LIGHT = Font.createFont(Font.TRUETYPE_FONT, new File(
+					"src/organiser/res/fonts/OpenSans-Light.ttf"));
+		} catch (Exception e) {
+			System.err.println("Missing vital resources!");
+			System.exit(-1);
+		}
+	}
 
-	public ModernButton(String text, int w, int h, Callable<?> func) throws FontFormatException, IOException {
+	private Callable<?> func;
+	
+	public ModernButton(String text, int w, int h, Callable<?> func, boolean useLightFont)
+			throws FontFormatException, IOException {
 		super(text);
 		this.func = func;
 		this.setSize(w, h);
-		initialize();
+		if(useLightFont)
+			initialize(LIGHT);
+		else
+			initialize(REGULAR);
 	}
 
-	public ModernButton(Icon icon, int w, int h, Callable<?> func) throws FontFormatException, IOException {
+	public ModernButton(String text, int w, int h, Callable<?> func)
+			throws FontFormatException, IOException {
+		this(text, w, h, func, false);
+	}
+
+	public ModernButton(Icon icon, int w, int h, Callable<?> func)
+			throws FontFormatException, IOException {
 		super(icon);
 		this.func = func;
 		this.setSize(w, h);
-		initialize();
+		initialize(REGULAR);
 	}
 
-	void initialize() throws FontFormatException, IOException {
+	void initialize(Font f) throws FontFormatException, IOException {
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.setBackground(NORMAL);
 		this.setForeground(new Color(220, 220, 220));
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.setFont(Font.createFont(Font.TRUETYPE_FONT,
-				new File("src/organiser/res/fonts/OpenSans-Regular.ttf"))
-				.deriveFont(13f));
+		this.setFont((REGULAR).deriveFont(13f));
 		this.setUI(new BasicButtonUI() {
 			public void installUI(JComponent c) {
 				super.installUI(c);

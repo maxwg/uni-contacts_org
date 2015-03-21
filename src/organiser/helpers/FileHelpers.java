@@ -49,6 +49,12 @@ public class FileHelpers {
 		return null;
 	}
 	
+	/**
+	 * Create a new cache file
+	 * @param fileName - file to be cached
+	 * @return the file created
+	 * @throws IOException - Could not create (no permission/etc)
+	 */
 	public static File newCacheFile(String fileName) throws IOException{
 		File f = new File("data/cache/"+fileName);
 		f.getParentFile().mkdirs();

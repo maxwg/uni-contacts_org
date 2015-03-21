@@ -3,6 +3,7 @@ package organiser.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class SidePanel extends JPanel implements Resizable {
 	
 	@Override
 	public Component add(Component comp){
-		items.add(comp);
+		items.add(0, comp);
 		comp.setLocation(1, curPos);
 		curPos+=comp.getHeight()+1;
 		super.add(comp);

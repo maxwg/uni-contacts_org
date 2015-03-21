@@ -19,4 +19,6 @@ public interface Record extends Comparable<Record>{
 	public boolean needsSave();
 	public void setNeedsSave(boolean needSave);
 	public Record deepCopy() throws Exception;
+	@Override
+	public boolean equals(Object other);
 }

@@ -1,8 +1,6 @@
 package organiser.gui;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -20,18 +18,17 @@ import organiser.business.RecordFactory;
 import organiser.business.contact.ContactRecord;
 import organiser.helpers.FileHelpers;
 import organiser.modernUIElements.ModernScrollPane;
-import sun.awt.RepaintArea;
 
 public class GUI implements Runnable, Resizable {
 	JFrame frame;
-	SidePanel contactsPane;
-	DetailPanel detailsPane;
-	TopMenu topMenu;
+	protected SidePanel contactsPane;
+	protected DetailPanel detailsPane;
+	protected TopMenu topMenu;
 	ModernScrollPane contactsPaneScroll;
 	ModernScrollPane detailsPaneScroll;
-	List<RecordPaneItem> loadedRecords;
-	List<RecordPaneItem> deletedRecords;
-	RecordPaneItem selectedRecord;
+	protected List<RecordPaneItem> loadedRecords;
+	protected List<RecordPaneItem> deletedRecords;
+	public RecordPaneItem selectedRecord;
 	Record curRecordCache;
 
 	public GUI() {
@@ -84,14 +81,15 @@ public class GUI implements Runnable, Resizable {
 		}
 	}
 
-	public void addNewRecord() throws Exception {
+	public Record addNewRecord() throws Exception {
 		ContactRecord r = new ContactRecord();
 		r.name.getValue().given = "New";
 		r.name.getValue().surname = "Person";
 		r.Save();
 		detailsPane.loadRecord(addToContactsPane(r, true));
+		return r;
 	}
-	
+
 	/**
 	 * Restores previously deleted record
 	 */
@@ -128,11 +126,10 @@ public class GUI implements Runnable, Resizable {
 	 *            record and display it to the user.
 	 * @return the panel item - this does not neccessarily have to be used but
 	 *         can be for the purposes of modification.
+	 * @throws Exception 
 	 */
 	public RecordPaneItem addToContactsPane(Record r, boolean select)
-			throws NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException,
-			FontFormatException, IOException {
+			throws Exception {
 		final RecordPaneItem tag = new RecordPaneItem(r, this);
 		if (select)
 			detailsPane.loadRecord(tag);
@@ -150,7 +147,7 @@ public class GUI implements Runnable, Resizable {
 		loadedRecords.remove(selectedRecord);
 		contactsPane.reRender();
 		if (loadedRecords.size() > 0)
-			detailsPane.loadRecord(loadedRecords.get(Math.max(0, rpos - 1)));
+			detailsPane.loadRecord(loadedRecords.get(Math.max(0, loadedRecords.size()-rpos-1)));
 		else {
 			addNewRecord();
 		}
@@ -218,6 +215,7 @@ public class GUI implements Runnable, Resizable {
 	 * 
 	 * @param e
 	 *            - the exception for message displaying purposes
+	 * @throws Exception
 	 */
 	private void handleCorruptDatabase(Exception e) {
 		File bak = null;
@@ -227,7 +225,10 @@ public class GUI implements Runnable, Resizable {
 						"Unable to import records! Would you like to restore from a backup?",
 						"Unable to load Database", JOptionPane.YES_NO_OPTION);
 		if (opt == JOptionPane.YES_OPTION) {
-			bak = FileHelpers.showFileDialog(false, RecordFactory.BAKLOC);
+			System.out.println("YES");
+			bak = FileHelpers.showFileDialog(false,
+					RecordFactory.BAKLOC);
+			System.out.println("YES");
 			if (bak != null) {
 				File f = new File(RecordFactory.DBLOC);
 				bak.renameTo(f);
@@ -245,7 +246,7 @@ public class GUI implements Runnable, Resizable {
 							JOptionPane.YES_NO_OPTION);
 			if (opt == JOptionPane.YES_OPTION) {
 				try {
-					File f = new File(RecordFactory.DBLOC);
+					File f = new File(RecordFactory.instance().DBLOC);
 					f.delete();
 					f.createNewFile();
 				} catch (Exception e1) {
@@ -262,8 +263,9 @@ public class GUI implements Runnable, Resizable {
 					try {
 						Runtime.getRuntime().exec(
 								"gedit " + RecordFactory.DBLOC);
-						Runtime.getRuntime().exec(
-								"notepad.exe " + RecordFactory.DBLOC);
+						Runtime.getRuntime()
+								.exec("notepad.exe "
+										+ RecordFactory.DBLOC);
 					} catch (IOException e1) {
 						/*
 						 * Currently supports windows and linux only. Ignore

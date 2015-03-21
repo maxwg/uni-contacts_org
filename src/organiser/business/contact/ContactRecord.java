@@ -188,8 +188,12 @@ public class ContactRecord implements Record {
 
 	@Override
 	public int compareTo(Record arg0) {
-		return getMainLabel().compareTo(arg0.getMainLabel());
+		return arg0.getMainLabel().compareTo(getMainLabel());
 	}
 
+	@Override
+	public boolean equals(Object other){
+		return other.getClass().equals(this.getClass()) && ((ContactRecord)other).getID().equals(this.getID());
+	}
 	
 }

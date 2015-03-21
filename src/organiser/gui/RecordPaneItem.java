@@ -27,7 +27,7 @@ public class RecordPaneItem extends JPanel {
 	public OJLabel text;
 	public OJLabel subtext;
 	BufferedImage curImg;
-	Record curRecord;
+	public Record curRecord;
 	GUI gui;
 
 	public RecordPaneItem(Record r, GUI parent) {

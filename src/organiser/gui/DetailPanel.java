@@ -41,7 +41,7 @@ public class DetailPanel extends JPanel implements Resizable {
 	private OJLabel mainLabel2;
 	private ArrayList<Component> labels;
 	private ArrayList<JPanel> fields;
-	Record curRecord;
+	public Record curRecord;
 	JLabel bg;
 	int curPos;
 	GUI gui;
@@ -86,12 +86,11 @@ public class DetailPanel extends JPanel implements Resizable {
 		this.add(mainPictureContainer);
 	}
 
-	public void loadRecord(RecordPaneItem r) throws FontFormatException,
-			IOException, NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
+	public void loadRecord(RecordPaneItem r) throws Exception {
 		if (gui.selectedRecord != null)
 			gui.selectedRecord.updateImage(gui.selectedRecord.curImg, false);
 		gui.selectedRecord = r;
+		gui.curRecordCache = r.curRecord.deepCopy();
 		curRecord = r.curRecord;
 		curPos = RECORDSTARTPOS;
 		for (Component c : labels)
@@ -136,7 +135,7 @@ public class DetailPanel extends JPanel implements Resizable {
 					this.add(rmBtn);
 				}
 				
-				ModernButton upBtn = new ModernButton("▲", 24, 12,
+				ModernButton upBtn = new ModernButton("^", 24, 12,
 						new Callable<Object>() {
 							@Override
 							public Object call() throws Exception {
@@ -150,7 +149,7 @@ public class DetailPanel extends JPanel implements Resizable {
 				upBtn.setLocation(460, curPos);
 				labels.add(upBtn);
 				this.add(upBtn);
-				ModernButton downBtn = new ModernButton("▼", 24, 12,
+				ModernButton downBtn = new ModernButton("v", 24, 12,
 						new Callable<Object>() {
 							@Override
 							public Object call() throws Exception {
@@ -161,7 +160,7 @@ public class DetailPanel extends JPanel implements Resizable {
 								refreshPanel(true);
 								return null;
 							}
-						});
+						}, true);
 				downBtn.setLocation(460, curPos+12);
 				labels.add(downBtn);
 				this.add(downBtn);
