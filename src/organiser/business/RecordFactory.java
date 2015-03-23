@@ -49,13 +49,13 @@ public class RecordFactory {
 		}
 		return instance;
 	}
-
-	public List<Record> getRecords() {
+	
+	public List<Record> getRecords(){
 		if (records == null)
 			records = new ArrayList<Record>();
 		return records;
 	}
-
+	
 	public void removeRecord(Record record) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(data));
 		File tmp = File.createTempFile("tmp", "");

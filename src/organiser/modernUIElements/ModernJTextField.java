@@ -65,7 +65,7 @@ public class ModernJTextField extends JTextField {
 		this.setFont(Font.createFont(Font.TRUETYPE_FONT,
 				new File("src/organiser/res/fonts/OpenSans-Regular.ttf"))
 				.deriveFont(15f));
-		this.setBorder(BorderFactory.createEmptyBorder());
+		this.setBorder(BorderFactory.createEmptyBorder(1, 6, 0, 6));
 		this.addKeyListener(new KeyListener() {
 
 			@Override

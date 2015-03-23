@@ -30,9 +30,17 @@ public class SidePanel extends JPanel implements Resizable {
 		return comp;
 	}
 	
+	public void reset(){
+		this.removeAll();
+		items.clear();
+		curPos=0;
+		repaint();
+		manageResize();
+	}
+	
 	public void reRender(){
 		this.removeAll();
-		curPos=0;
+		curPos= 0;
 		for(Component comp : items){
 			comp.setLocation(1, curPos);
 			curPos+=comp.getHeight()+1;

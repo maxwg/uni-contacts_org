@@ -1,32 +1,42 @@
 package organiser.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import organiser.business.Record;
 import organiser.business.RecordFactory;
 import organiser.business.contact.ContactRecord;
 import organiser.helpers.FileHelpers;
+import organiser.modernUIElements.ModernJTextField;
 import organiser.modernUIElements.ModernScrollPane;
+import organiser.modernUIElements.OJLabel;
 
 public class GUI implements Runnable, Resizable {
 	JFrame frame;
 	protected SidePanel contactsPane;
 	protected DetailPanel detailsPane;
 	protected TopMenu topMenu;
+	protected ModernJTextField searchBox;
+	protected JLabel searchLabel;
 	ModernScrollPane contactsPaneScroll;
 	ModernScrollPane detailsPaneScroll;
 	protected List<RecordPaneItem> loadedRecords;
+	protected List<RecordPaneItem> visibleRecords;
 	protected List<RecordPaneItem> deletedRecords;
 	public RecordPaneItem selectedRecord;
 	Record curRecordCache;
@@ -57,6 +67,14 @@ public class GUI implements Runnable, Resizable {
 		ResizeListener.AttachResizeEvent(detailsPane, frame);
 		try {
 			topMenu = new TopMenu(frame, this);
+			searchBox = new ModernJTextField(300, 24);
+			searchBox.setBackground(new Color(24, 24, 24));
+			searchBox.setForeground(Color.white);
+			setupSearch();
+			searchLabel = new OJLabel(" SEARCH", 14, OJLabel.LIGHT);
+			searchLabel.setBackground(new Color(42, 42, 42));
+			searchLabel.setForeground(new Color(200, 200, 200));
+			searchLabel.setOpaque(true);
 			renderRecords();
 		} catch (Exception e) {
 			handleCorruptDatabase(e);
@@ -64,9 +82,9 @@ public class GUI implements Runnable, Resizable {
 
 		frame.getContentPane().add(contactsPaneScroll);
 		frame.getContentPane().add(detailsPaneScroll);
-
 		frame.getContentPane().add(topMenu);
-
+		frame.getContentPane().add(searchBox);
+		frame.getContentPane().add(searchLabel);
 		frame.pack();
 		frame.setVisible(true);
 		manageResize();
@@ -74,11 +92,20 @@ public class GUI implements Runnable, Resizable {
 
 	private void renderRecords() throws Exception {
 		loadedRecords = new ArrayList<RecordPaneItem>();
+		visibleRecords = new ArrayList<RecordPaneItem>();
 		deletedRecords = new ArrayList<RecordPaneItem>();
 
 		for (Record r : RecordFactory.instance().getRecords()) {
 			addToContactsPane(r, false);
 		}
+	}
+
+	private void showVisibleRecords() throws Exception {
+		contactsPane.reset();
+		for (RecordPaneItem r : visibleRecords){
+			contactsPane.add(r);
+		}
+		manageResize();
 	}
 
 	public Record addNewRecord() throws Exception {
@@ -126,7 +153,7 @@ public class GUI implements Runnable, Resizable {
 	 *            record and display it to the user.
 	 * @return the panel item - this does not neccessarily have to be used but
 	 *         can be for the purposes of modification.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public RecordPaneItem addToContactsPane(Record r, boolean select)
 			throws Exception {
@@ -147,7 +174,8 @@ public class GUI implements Runnable, Resizable {
 		loadedRecords.remove(selectedRecord);
 		contactsPane.reRender();
 		if (loadedRecords.size() > 0)
-			detailsPane.loadRecord(loadedRecords.get(Math.max(0, loadedRecords.size()-rpos-1)));
+			detailsPane.loadRecord(loadedRecords.get(Math.max(0,
+					loadedRecords.size() - rpos - 1)));
 		else {
 			addNewRecord();
 		}
@@ -196,9 +224,14 @@ public class GUI implements Runnable, Resizable {
 		int frameHeight = frame.getContentPane().getHeight();
 		Dimension cpSize = new Dimension(Math.max(
 				frameHeight > contactsPane.getHeight() ? 56 : 63,
-				Math.min(264, frameWidth - 460)), frameHeight - TopMenu.HEIGHT);
+				Math.min(264, frameWidth - 460)), frameHeight - TopMenu.HEIGHT
+				- 32);
 		contactsPane.setPreferredSize(cpSize);
 		contactsPaneScroll.setSize(cpSize);
+		searchBox.setSize(cpSize.width - 68, 32);
+		searchBox.setLocation(68, cpSize.height + topMenu.HEIGHT);
+		searchLabel.setSize(68, 32);
+		searchLabel.setLocation(0, cpSize.height + topMenu.HEIGHT);
 		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
 		detailsPaneScroll.setSize(new Dimension(frameWidth
 				- contactsPane.getPreferredSize().width, frameHeight
@@ -226,8 +259,7 @@ public class GUI implements Runnable, Resizable {
 						"Unable to load Database", JOptionPane.YES_NO_OPTION);
 		if (opt == JOptionPane.YES_OPTION) {
 			System.out.println("YES");
-			bak = FileHelpers.showFileDialog(false,
-					RecordFactory.BAKLOC);
+			bak = FileHelpers.showFileDialog(false, RecordFactory.BAKLOC);
 			System.out.println("YES");
 			if (bak != null) {
 				File f = new File(RecordFactory.DBLOC);
@@ -263,9 +295,8 @@ public class GUI implements Runnable, Resizable {
 					try {
 						Runtime.getRuntime().exec(
 								"gedit " + RecordFactory.DBLOC);
-						Runtime.getRuntime()
-								.exec("notepad.exe "
-										+ RecordFactory.DBLOC);
+						Runtime.getRuntime().exec(
+								"notepad.exe " + RecordFactory.DBLOC);
 					} catch (IOException e1) {
 						/*
 						 * Currently supports windows and linux only. Ignore
@@ -282,5 +313,46 @@ public class GUI implements Runnable, Resizable {
 				System.exit(-1);
 			}
 		}
+	}
+
+	/**
+	 * Setups the searching method of GUI
+	 */
+	private void setupSearch() {
+		searchBox.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				try {
+					manageSearch(searchBox.getText());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	private void manageSearch(String query) throws Exception {
+		visibleRecords.clear();
+		if (query != null && !query.equals("")) {
+			for (RecordPaneItem r : loadedRecords)
+				if (r.curRecord.getMainLabel().toLowerCase().contains(query.toLowerCase()))
+					visibleRecords.add(r);
+		}
+		else{
+			visibleRecords.addAll(loadedRecords);
+		}
+		showVisibleRecords();
 	}
 }
