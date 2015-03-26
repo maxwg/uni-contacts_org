@@ -1,15 +1,12 @@
 package organiser.business.contact;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
-
-import org.hamcrest.Factory;
 
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
@@ -123,7 +120,7 @@ public class ContactRecord implements Record {
 		allItems = new ArrayList<DataItem<? extends DataItemValue>>();
 		String[] dataItems = itemXML.split("" + '\n');
 		for (String item : dataItems) {
-			Class valueClass = Class.forName(RecordFactory.getFirstTag(item)
+			Class<?> valueClass = Class.forName(RecordFactory.getFirstTag(item)
 					.substring(6));
 			DataItemValue value = (DataItemValue) valueClass.newInstance();
 			String innerData = RecordFactory.getTagValue(item);

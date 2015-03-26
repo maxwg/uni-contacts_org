@@ -8,7 +8,6 @@ import java.awt.FontFormatException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -18,7 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
@@ -244,7 +242,7 @@ public class DetailPanel extends JPanel implements Resizable {
 					new Callable<Object>() {
 						@Override
 						public Object call() throws Exception {
-							Class classChoice = (Class) JOptionPane
+							Class<?> classChoice = (Class<?>) JOptionPane
 									.showInputDialog(
 											null,
 											"What type of field would you like to add?\n",

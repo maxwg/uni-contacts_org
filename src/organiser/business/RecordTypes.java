@@ -9,6 +9,7 @@ import organiser.business.contact.Email;
 import organiser.business.contact.PhoneNumber;
 
 public class RecordTypes {
+	@SuppressWarnings("rawtypes")
 	public static Class[] types;
 	public static ArrayList<String> importantFields;
 	static {

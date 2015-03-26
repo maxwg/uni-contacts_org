@@ -1,17 +1,10 @@
 package organiser.testing;
 
-import static org.junit.Assert.*;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
-import organiser.business.DataItem;
-import organiser.business.DataItemValue;
-import organiser.business.Record;
 import organiser.business.contact.ContactRecord;
 
 public class RecordFactoryTest {

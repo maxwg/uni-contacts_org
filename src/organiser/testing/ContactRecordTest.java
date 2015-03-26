@@ -7,12 +7,9 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import organiser.business.contact.Address;
 import organiser.business.contact.ContactName;
 import organiser.business.contact.ContactRecord;
 import organiser.business.contact.Email;
-import organiser.business.contact.PhoneNumber;
 import organiser.modernUIElements.ModernJTextField;
 
 public class ContactRecordTest {

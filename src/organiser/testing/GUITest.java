@@ -2,7 +2,6 @@ package organiser.testing;
 
 import static org.junit.Assert.fail;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;

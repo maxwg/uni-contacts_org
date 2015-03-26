@@ -1,6 +1,5 @@
 package organiser.business;
 
-import java.util.UUID;
 
 public class DataItem<T extends DataItemValue> {
 	private String label;

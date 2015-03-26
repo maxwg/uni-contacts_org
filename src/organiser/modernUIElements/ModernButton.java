@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 

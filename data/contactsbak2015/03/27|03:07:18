@@ -1,9 +1,0 @@
-<Record class organiser.business.contact.ContactRecord>910626d8-4067-49d1-aef0-e4d83adeaead
-<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
-<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
-<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
-<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
-<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
-<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
-<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
-</Record>

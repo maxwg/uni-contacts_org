@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,6 +225,7 @@ public class GUI implements Runnable, Resizable {
 		return JOptionPane.YES_NO_OPTION;
 	}
 
+	@SuppressWarnings("static-access")
 	public void manageResize() {
 		int frameWidth = frame.getContentPane().getWidth();
 		int frameHeight = frame.getContentPane().getHeight();
@@ -239,10 +239,10 @@ public class GUI implements Runnable, Resizable {
 		searchBox.setLocation(68, cpSize.height + topMenu.HEIGHT);
 		searchLabel.setSize(68, 32);
 		searchLabel.setLocation(0, cpSize.height + topMenu.HEIGHT);
-		contactsPaneScroll.setLocation(new Point(0, TopMenu.HEIGHT));
+		contactsPaneScroll.setLocation(new Point(0, topMenu.HEIGHT));
 		detailsPaneScroll.setSize(new Dimension(frameWidth
 				- contactsPane.getPreferredSize().width, frameHeight
-				- TopMenu.HEIGHT));
+				- topMenu.HEIGHT));
 		detailsPaneScroll.setLocation(new Point(
 				contactsPane.getPreferredSize().width, TopMenu.HEIGHT));
 		topMenu.setSize(frameWidth, topMenu.HEIGHT);
@@ -283,6 +283,7 @@ public class GUI implements Runnable, Resizable {
 							JOptionPane.YES_NO_OPTION);
 			if (opt == JOptionPane.YES_OPTION) {
 				try {
+					@SuppressWarnings("static-access")
 					File f = new File(Factory.DBLOC);
 					f.delete();
 					f.createNewFile();

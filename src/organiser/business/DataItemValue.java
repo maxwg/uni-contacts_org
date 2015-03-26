@@ -2,8 +2,6 @@ package organiser.business;
 
 import java.io.IOException;
 
-import javax.swing.JPanel;
-
 import organiser.gui.DisplayableItem;
 
 public interface DataItemValue extends DisplayableItem {

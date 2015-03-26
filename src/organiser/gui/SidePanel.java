@@ -3,12 +3,13 @@ package organiser.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 public class SidePanel extends JPanel implements Resizable {
+
+	private static final long serialVersionUID = -1564366931785130251L;
 	int curPos;
 	ArrayList<Component> items;
 	
