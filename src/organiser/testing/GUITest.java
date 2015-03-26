@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import organiser.business.Record;
+import organiser.business.RecordFactory;
+import organiser.gui.RecordPaneItem;
 
 public class GUITest {
 	private TestGUI gui;
@@ -120,7 +122,17 @@ public class GUITest {
 				public void run() {
 					try {
 						// TODO Auto-generated method stub
-						System.out.println(gui.getLoadedRecords().contains(records.get(0)));
+						
+						for(Record r : records){
+							boolean in = false;
+							for(RecordPaneItem rpi : gui.getLoadedRecords()){
+								if(rpi.curRecord.equals(r))
+									in=true;
+							}
+							if(!in)
+								fail("Added record was not found when re-initialising the program!");
+							RecordFactory.instance().removeRecord(r);
+						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

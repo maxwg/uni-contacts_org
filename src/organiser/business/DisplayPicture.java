@@ -24,7 +24,8 @@ public class DisplayPicture implements DataItemValue {
 	private static BufferedImage blankImg;
 	static {
 		try {
-			blankImg = ImageIO.read(new File("src/organiser/res/plusTrans.png"));
+			blankImg = ImageIO.read(DisplayPicture.class
+					.getResourceAsStream("/organiser/res/plusTrans.png"));
 		} catch (IOException e) {
 			System.err.println("FAILURE TO LOAD VITAL RESOURCES!");
 			System.exit(-1);

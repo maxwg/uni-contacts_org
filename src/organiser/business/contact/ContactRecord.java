@@ -27,7 +27,7 @@ public class ContactRecord implements Record {
 	static {
 		try {
 			defaultImg = ImageIO
-					.read(new File("src/organiser/res/blankDP.jpg"));
+					.read(ContactRecord.class.getResourceAsStream("/organiser/res/blankDP.jpg"));
 		} catch (IOException e) {
 			System.err.println("FAILURE TO LOAD VITAL RESOURCES!");
 			System.exit(-1);

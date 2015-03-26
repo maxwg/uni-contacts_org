@@ -25,10 +25,14 @@ public class ModernButton extends JButton {
 	private static Font LIGHT;
 	static {
 		try {
-			REGULAR = Font.createFont(Font.TRUETYPE_FONT, new File(
-					"src/organiser/res/fonts/OpenSans-Regular.ttf"));
-			LIGHT = Font.createFont(Font.TRUETYPE_FONT, new File(
-					"src/organiser/res/fonts/OpenSans-Light.ttf"));
+			REGULAR = Font
+					.createFont(
+							Font.TRUETYPE_FONT,
+							ModernButton.class
+									.getResourceAsStream("/organiser/res/fonts/OpenSans-Regular.ttf"));
+			LIGHT = Font.createFont(Font.TRUETYPE_FONT, 
+					ModernButton.class
+					.getResourceAsStream("/organiser/res/fonts/OpenSans-Light.ttf"));
 		} catch (Exception e) {
 			System.err.println("Missing vital resources!");
 			System.exit(-1);
@@ -36,13 +40,13 @@ public class ModernButton extends JButton {
 	}
 
 	private Callable<?> func;
-	
-	public ModernButton(String text, int w, int h, Callable<?> func, boolean useLightFont)
-			throws FontFormatException, IOException {
+
+	public ModernButton(String text, int w, int h, Callable<?> func,
+			boolean useLightFont) throws FontFormatException, IOException {
 		super(text);
 		this.func = func;
 		this.setSize(w, h);
-		if(useLightFont)
+		if (useLightFont)
 			initialize(LIGHT);
 		else
 			initialize(REGULAR);

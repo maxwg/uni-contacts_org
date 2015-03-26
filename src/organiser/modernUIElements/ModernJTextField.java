@@ -17,7 +17,7 @@ import organiser.business.DataItemValue;
 
 public class ModernJTextField extends JTextField {
 	private static final long serialVersionUID = 4159783237856056109L;
-	private static final char[] illegalCharacters = { '\1', '<', '>' };
+	public static final char[] illegalCharacters = { '\1', '<', '>', '\n', '\r'};
 
 	public ModernJTextField(final DataItemValue item, final Field field,
 			int width) throws FontFormatException, IOException,
@@ -63,7 +63,8 @@ public class ModernJTextField extends JTextField {
 		this.setSize(width, 24);
 		this.setMargin(new Insets(0, 3, 0, 3));
 		this.setFont(Font.createFont(Font.TRUETYPE_FONT,
-				new File("src/organiser/res/fonts/OpenSans-Regular.ttf"))
+				ModernJTextField.class
+				.getResourceAsStream("/organiser/res/fonts/OpenSans-Regular.ttf"))
 				.deriveFont(15f));
 		this.setBorder(BorderFactory.createEmptyBorder(1, 6, 0, 6));
 		this.addKeyListener(new KeyListener() {

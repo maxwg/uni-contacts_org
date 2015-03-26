@@ -54,7 +54,7 @@ public class DetailPanel extends JPanel implements Resizable {
 		fields = new ArrayList<JPanel>();
 		curPos = RECORDSTARTPOS;
 		try {
-			bgBlank = ImageIO.read(new File("src/organiser/res/bg.png"));
+			bgBlank = ImageIO.read(DetailPanel.class.getResourceAsStream("/organiser/res/bg.png"));
 			bg = new JLabel();
 			this.add(bg);
 		} catch (IOException e) {
