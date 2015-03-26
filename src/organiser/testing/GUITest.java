@@ -28,7 +28,7 @@ public class GUITest {
 		// These two lists are hacks, as java can only access finals,
 		// but cannot set the value of finals.
 		final ArrayList<Integer> recordCounts = new ArrayList<Integer>();
-		//We need to call an invokeLater to ensure the GUI has finished loading
+		// We need to call an invokeLater to ensure the GUI has finished loading
 		final ArrayList<GUI> guis = new ArrayList<GUI>();
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -37,7 +37,7 @@ public class GUITest {
 					guis.add(new GUI());
 				}
 			});
-			SwingUtilities.invokeLater(new Runnable() {				
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					recordCounts.add(guis.get(0).recordCount());
@@ -62,16 +62,17 @@ public class GUITest {
 					guis.add(new GUI());
 				}
 			});
-			SwingUtilities.invokeLater(new Runnable() {				
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					recordCounts.add(guis.get(1).recordCount());
 				}
 			});
-			SwingUtilities.invokeLater(new Runnable() {				
+			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					Assert.assertTrue(recordCounts.get(0) == recordCounts.get(1));
+					Assert.assertTrue(recordCounts.get(0) == recordCounts
+							.get(1));
 				}
 			});
 		} catch (Exception e) {
@@ -89,29 +90,37 @@ public class GUITest {
 				public void run() {
 					try {
 						// TODO Auto-generated method stub
-						int startSize = gui.getLoadedRecords().size();
+						int expectedSize = gui.getLoadedRecords().size();
 						ArrayList<Record> added = new ArrayList<Record>();
 						for (int i = 1; i < 6; i++) {
 							added.add(gui.addNewRecord());
-							Assert.assertTrue(startSize + i == gui
+							expectedSize++;
+							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
 						}
-						for (int i = 1; i < added.size() + 1; i++) {
+						boolean reachedZero = false;
+						for (int i = 1; expectedSize > 0 && !reachedZero; i++) {
 							gui.deleteCurrentRecord();
-							Assert.assertTrue(startSize + added.size() - i == gui
+							expectedSize--;
+							reachedZero = expectedSize == 0 ? true : reachedZero;
+							expectedSize = expectedSize == 0 ? 1 : expectedSize;
+							// Expect that the GUI adds new record when empty.
+							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
 							Assert.assertTrue(i == gui.getDeletedRecords()
 									.size());
 						}
-						for (int i = 1; i < added.size() + 1; i++) {
+						while( gui.getDeletedRecords().size()>0) {
 							gui.selectedRecord.curRecord.setNeedsSave(false);
 							gui.undoRecordDelete();
-							Assert.assertTrue(startSize + i == gui
+							expectedSize++;
+							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
 						}
-						for (int i = 1; i < added.size() + 1; i++) {
+						for (int i = 1; expectedSize>0 + 1; i++) {
 							gui.deleteCurrentRecord();
-							Assert.assertTrue(startSize + added.size() - i == gui
+							expectedSize--;
+							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
 							Assert.assertTrue(i == gui.getDeletedRecords()
 									.size());

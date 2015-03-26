@@ -2,6 +2,8 @@ package organiser.testing;
 
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.junit.Assert;
 import organiser.gui.DetailPanel;
 import organiser.gui.GUI;
@@ -10,28 +12,38 @@ import organiser.gui.SidePanel;
 import organiser.gui.TopMenu;
 
 public class TestGUI extends GUI {
-	public TestGUI(){
+	public TestGUI() {
 		super();
-		try {
-			this.Factory= new TestRecordFactory();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail("Could not instantiate test factory!");
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Factory = new TestRecordFactory();
+				} catch (Exception e) {
+					e.printStackTrace();
+					Assert.fail("Could not instantiate test factory!");
+				}
+			}
+		});
 	}
-	public List<RecordPaneItem> getLoadedRecords(){
+
+	public List<RecordPaneItem> getLoadedRecords() {
 		return loadedRecords;
 	}
-	public List<RecordPaneItem> getDeletedRecords(){
+
+	public List<RecordPaneItem> getDeletedRecords() {
 		return deletedRecords;
 	}
-	public TopMenu getTopMenu(){
+
+	public TopMenu getTopMenu() {
 		return topMenu;
 	}
-	public DetailPanel getDetailPanel(){
+
+	public DetailPanel getDetailPanel() {
 		return detailsPane;
 	}
-	public SidePanel getSidePanel(){
+
+	public SidePanel getSidePanel() {
 		return contactsPane;
 	}
 }
