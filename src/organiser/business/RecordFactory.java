@@ -27,7 +27,7 @@ public class RecordFactory {
 	private static final int INRECORD = 1;
 	public static final String RECORD = "Record";
 	public static final String DBLOC = "data/contacts";
-	public static final String BAKLOC = DBLOC+"bak";
+	public static final String BAKLOC = DBLOC + "bak";
 
 	protected static RecordFactory instance;
 	private List<Record> records;
@@ -49,13 +49,13 @@ public class RecordFactory {
 		}
 		return instance;
 	}
-	
-	public List<Record> getRecords(){
+
+	public List<Record> getRecords() {
 		if (records == null)
 			records = new ArrayList<Record>();
 		return records;
 	}
-	
+
 	public void removeRecord(Record record) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(data));
 		File tmp = File.createTempFile("tmp", "");
@@ -105,9 +105,8 @@ public class RecordFactory {
 	}
 
 	/**
-	 * Uses reflection to dynamically instantiate the Record class.
-	 * This allows RecordFactory to support any record type in the
-	 * future.
+	 * Uses reflection to dynamically instantiate the Record class. This allows
+	 * RecordFactory to support any record type in the future.
 	 * 
 	 * @throws Exception
 	 *             - Something went wrong with import - Corrupt DB likely
@@ -129,7 +128,9 @@ public class RecordFactory {
 					String recordType = lineData.substring(RECORD.length()
 							+ "class".length() + 2);
 					curRecord = (Record) Class.forName(recordType)
-							.newInstance();
+							.getConstructor(RecordFactory.class)
+							.newInstance(this);
+
 					curRecord.setID(UUID.fromString(line.substring(lineData
 							.length() + 2)));
 					status = INRECORD;

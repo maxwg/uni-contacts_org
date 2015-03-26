@@ -27,8 +27,8 @@ public class ContactRecordTest {
 	public void testImportExport() {
 		final int noTests = 50;
 		for (int i = 0; i < noTests; i++) {
-			ContactRecord r1 = new ContactRecord();
-			ContactRecord r2 = new ContactRecord();
+			ContactRecord r1 = new ContactRecord(null);
+			ContactRecord r2 = new ContactRecord(null);
 			r1.email.setValue(new Email(ranString(20)));
 			r1.name.setValue(new ContactName(ranString(15), ranString(15)));
 			r1.mobilePh.getValue().number = ranString(10);

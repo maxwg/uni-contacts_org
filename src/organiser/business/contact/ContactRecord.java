@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
+import org.hamcrest.Factory;
+
 import organiser.business.DataItem;
 import organiser.business.DataItemValue;
 import organiser.business.DisplayPictureEmpty;
@@ -45,8 +47,10 @@ public class ContactRecord implements Record {
 	private ArrayList<DataItem<? extends DataItemValue>> allItems;
 	private UUID id;
 	private boolean needsSave;
-
-	public ContactRecord() {
+	RecordFactory Factory;
+	
+	public ContactRecord(RecordFactory Factory) {
+		this.Factory = Factory;
 		id = UUID.randomUUID();
 		name = new DataItem<ContactName>(NAME, new ContactName());
 		mobilePh = new DataItem<PhoneNumber>(MOBILEPH, new PhoneNumber());
@@ -108,8 +112,8 @@ public class ContactRecord implements Record {
 
 	@Override
 	public void Save() throws Exception {
-		RecordFactory.instance().removeRecord(this);
-		RecordFactory.instance().addRecord(this);
+		Factory.removeRecord(this);
+		Factory.addRecord(this);
 		this.setNeedsSave(false);
 	}
 
@@ -180,7 +184,7 @@ public class ContactRecord implements Record {
 
 	@Override
 	public ContactRecord deepCopy() throws Exception {
-		ContactRecord cpy = new ContactRecord();
+		ContactRecord cpy = new ContactRecord(Factory);
 		cpy.setID(id);
 		cpy.importItem(this.exportInnerData());
 		return cpy;

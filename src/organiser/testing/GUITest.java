@@ -2,6 +2,7 @@ package organiser.testing;
 
 import static org.junit.Assert.fail;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import organiser.business.Record;
 import organiser.business.RecordFactory;
+import organiser.gui.GUI;
 import organiser.gui.RecordPaneItem;
 
 public class GUITest {
@@ -19,6 +21,64 @@ public class GUITest {
 	@Before
 	public void setUp() throws Exception {
 		gui = new TestGUI();
+	}
+
+	@Test
+	public void testThatTestGUIsDoNotLeakIntoMainDB() {
+		// These two lists are hacks, as java can only access finals,
+		// but cannot set the value of finals.
+		final ArrayList<Integer> recordCounts = new ArrayList<Integer>();
+		//We need to call an invokeLater to ensure the GUI has finished loading
+		final ArrayList<GUI> guis = new ArrayList<GUI>();
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					guis.add(new GUI());
+				}
+			});
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					recordCounts.add(guis.get(0).recordCount());
+				}
+			});
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						for (int i = 0; i < 10; i++) {
+							gui.addNewRecord();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						fail("Exception occurred : " + e.getMessage());
+					}
+				}
+			});
+			SwingUtilities.invokeAndWait(new Runnable() {
+				@Override
+				public void run() {
+					guis.add(new GUI());
+				}
+			});
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					recordCounts.add(guis.get(1).recordCount());
+				}
+			});
+			SwingUtilities.invokeLater(new Runnable() {				
+				@Override
+				public void run() {
+					Assert.assertTrue(recordCounts.get(0) == recordCounts.get(1));
+				}
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown: " + e.getMessage());
+		}
 	}
 
 	@Test
@@ -122,14 +182,14 @@ public class GUITest {
 				public void run() {
 					try {
 						// TODO Auto-generated method stub
-						
-						for(Record r : records){
+
+						for (Record r : records) {
 							boolean in = false;
-							for(RecordPaneItem rpi : gui.getLoadedRecords()){
-								if(rpi.curRecord.equals(r))
-									in=true;
+							for (RecordPaneItem rpi : gui.getLoadedRecords()) {
+								if (rpi.curRecord.equals(r))
+									in = true;
 							}
-							if(!in)
+							if (!in)
 								fail("Added record was not found when re-initialising the program!");
 							RecordFactory.instance().removeRecord(r);
 						}

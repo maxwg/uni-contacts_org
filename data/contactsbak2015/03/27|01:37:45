@@ -1,0 +1,9 @@
+<Record class organiser.business.contact.ContactRecord>33bab03b-3fba-4c17-a6ce-cadb03faec7a
+<class organiser.business.contact.ContactName>NameJamesDude</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile0434244344</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph4433233132</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph43244414212</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Emailjdude@dude.com</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address312dudestSydneyNSW2131Australia</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>

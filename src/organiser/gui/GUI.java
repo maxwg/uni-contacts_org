@@ -40,6 +40,7 @@ public class GUI implements Runnable, Resizable {
 	protected List<RecordPaneItem> deletedRecords;
 	public RecordPaneItem selectedRecord;
 	Record curRecordCache;
+	protected RecordFactory Factory;
 
 	public GUI() {
 		SwingUtilities.invokeLater(this);
@@ -65,7 +66,9 @@ public class GUI implements Runnable, Resizable {
 		detailsPaneScroll = new ModernScrollPane(detailsPane, 42, 24);
 		ResizeListener.AttachResizeEvent(contactsPane, frame);
 		ResizeListener.AttachResizeEvent(detailsPane, frame);
+
 		try {
+			Factory = RecordFactory.instance();
 			topMenu = new TopMenu(frame, this);
 			searchBox = new ModernJTextField(300, 24);
 			searchBox.setBackground(new Color(24, 24, 24));
@@ -79,7 +82,7 @@ public class GUI implements Runnable, Resizable {
 		} catch (Exception e) {
 			handleCorruptDatabase(e);
 		}
-
+		
 		frame.getContentPane().add(contactsPaneScroll);
 		frame.getContentPane().add(detailsPaneScroll);
 		frame.getContentPane().add(topMenu);
@@ -90,12 +93,16 @@ public class GUI implements Runnable, Resizable {
 		manageResize();
 	}
 
+	public int recordCount(){
+		return loadedRecords.size();
+	}
+	
 	private void renderRecords() throws Exception {
 		loadedRecords = new ArrayList<RecordPaneItem>();
 		visibleRecords = new ArrayList<RecordPaneItem>();
 		deletedRecords = new ArrayList<RecordPaneItem>();
 
-		for (Record r : RecordFactory.instance().getRecords()) {
+		for (Record r : Factory.getRecords()) {
 			addToContactsPane(r, false);
 		}
 	}
@@ -109,7 +116,7 @@ public class GUI implements Runnable, Resizable {
 	}
 
 	public Record addNewRecord() throws Exception {
-		ContactRecord r = new ContactRecord();
+		ContactRecord r = new ContactRecord(Factory);
 		r.name.getValue().given = "New";
 		r.name.getValue().surname = "Person";
 		r.Save();
@@ -167,7 +174,7 @@ public class GUI implements Runnable, Resizable {
 	}
 
 	public void deleteCurrentRecord() throws Exception {
-		RecordFactory.instance().removeRecord(selectedRecord.curRecord);
+		Factory.removeRecord(selectedRecord.curRecord);
 		int rpos = contactsPane.items.indexOf(selectedRecord);
 		contactsPane.items.remove(rpos);
 		deletedRecords.add(selectedRecord);
@@ -264,8 +271,6 @@ public class GUI implements Runnable, Resizable {
 			if (bak != null) {
 				File f = new File(RecordFactory.DBLOC);
 				bak.renameTo(f);
-				frame.dispose();
-				run();
 			}
 		}
 		if (bak == null) {
@@ -278,7 +283,7 @@ public class GUI implements Runnable, Resizable {
 							JOptionPane.YES_NO_OPTION);
 			if (opt == JOptionPane.YES_OPTION) {
 				try {
-					File f = new File(RecordFactory.instance().DBLOC);
+					File f = new File(Factory.DBLOC);
 					f.delete();
 					f.createNewFile();
 				} catch (Exception e1) {
@@ -312,6 +317,8 @@ public class GUI implements Runnable, Resizable {
 				}
 				System.exit(-1);
 			}
+			frame.dispose();
+			run();
 		}
 	}
 

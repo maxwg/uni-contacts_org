@@ -25,7 +25,7 @@ public class RecordFactoryTest {
 
 	private void populateRecords(int n) throws Exception{
 		for (int i = 0; i < n; i++) {
-			factory.addRecord(new ContactRecord());
+			factory.addRecord(new ContactRecord(factory));
 			factory.importXMLDBExposed();
 		}
 	}
