@@ -81,6 +81,7 @@ public class RecordFactory {
 		writer.close();
 		File databak = new File(
 				bakLoc
+						+ "/"
 						+ (new SimpleDateFormat("yyyy/MM/dd|HH:mm:ss")
 								.format(new Date())));
 		databak.getParentFile().mkdirs();
