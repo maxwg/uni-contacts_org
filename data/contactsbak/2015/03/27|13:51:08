@@ -18,14 +18,4 @@
 <class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
 <class organiser.business.contact.Email>see the second last</class organiser.business.contact.Email>
 <class organiser.business.contact.Email>Commiton GIT.</class organiser.business.contact.Email>
-<class organiser.business.contact.Email>Note ThatTests are not perfectly </class organiser.business.contact.Email>
-<class organiser.business.contact.Address>funcitonal on the oldcommits. It is howeverpossibleto just copy over</class organiser.business.contact.Address>
-<class organiser.business.contact.Address>theentire data directoryfrom the oldcommits</class organiser.business.contact.Address>
-</Record>
-<Record class organiser.business.contact.ContactRecord>1470f556-1f83-4c01-9934-cf3c677f81a2
-<class organiser.business.contact.ContactName>NameAnotherPerson</class organiser.business.contact.ContactName>
-<class organiser.business.contact.PhoneNumber>Websitewww.google.com</class organiser.business.contact.PhoneNumber>
-<class organiser.business.contact.Email>Emailhuman@aol.com</class organiser.business.contact.Email>
-<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
-<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
 </Record>
