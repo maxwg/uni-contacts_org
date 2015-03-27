@@ -16,6 +16,10 @@ public class RecordFactoryTest {
 		assertTrue(factory.getRecords().size() == 0);
 	}
 
+	/**
+	 * Adds n records to the factory.
+	 * @param n - number of records
+	 */
 	private void populateRecords(int n) throws Exception{
 		for (int i = 0; i < n; i++) {
 			factory.addRecord(new ContactRecord(factory));
@@ -24,6 +28,10 @@ public class RecordFactoryTest {
 	}
 	
 	@Test
+	/**
+	 * Tests that initializing the DB does not override the
+	 * current DB if a DB already exists.
+	 */
 	public void testInitializingDoesNotOverride(){
 		try {
 			populateRecords(3);
@@ -39,6 +47,9 @@ public class RecordFactoryTest {
 	}
 	
 	@Test
+	/**
+	 * Tests records populate correctly.
+	 */
 	public void testAddingRecords() {
 		try {
 			for (int i = 0; i < 10; i++) {
@@ -53,6 +64,9 @@ public class RecordFactoryTest {
 	}
 	
 	@Test
+	/**
+	 * Tests records remove correctly
+	 */
 	public void testRemovingRecords(){
 		try {
 			populateRecords(10);

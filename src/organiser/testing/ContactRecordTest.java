@@ -21,6 +21,10 @@ public class ContactRecordTest {
 	}
 
 	@Test
+	/**
+	 * Tests that importing an exported contact record
+	 * is done correctly
+	 */
 	public void testImportExport() {
 		final int noTests = 50;
 		for (int i = 0; i < noTests; i++) {

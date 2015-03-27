@@ -1,0 +1,18 @@
+<Record class organiser.business.contact.ContactRecord>fe026e9f-0582-46e1-9aa3-6363d158fbc0
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>
+<Record class organiser.business.contact.ContactRecord>fbb956e2-ae80-44a7-b76b-4740439fa555
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>

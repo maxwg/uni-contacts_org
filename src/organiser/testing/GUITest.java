@@ -23,23 +23,26 @@ public class GUITest {
 	}
 
 	@Test
+	/**
+	 * This is indeed a test for a test class!
+	 * This test ensures that anything done in the testing environment
+	 * does not leak into the main database - i.e, ensures isolation.
+	 * 
+	 * This is done by creating a normal GUI and counting the records
+	 * in the main database, creating a TestGUI and adding 10 new records,
+	 * and recreating a normal GUI and counting the records, asserting
+	 * that first two instances must be the same
+	 */
 	public void testThatTestGUIsDoNotLeakIntoMainDB() {
-		// These two lists are hacks, as java can only access finals,
+		// This list is a hack, as java can only access finals,
 		// but cannot set the value of finals.
 		final ArrayList<Integer> recordCounts = new ArrayList<Integer>();
-		// We need to call an invokeLater to ensure the GUI has finished loading
-		final ArrayList<GUI> guis = new ArrayList<GUI>();
 		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					guis.add(new GUI());
-				}
-			});
+			final GUI gui1 = new GUI();
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					recordCounts.add(guis.get(0).recordCount());
+					recordCounts.add(gui1.recordCount());
 				}
 			});
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -55,16 +58,12 @@ public class GUITest {
 					}
 				}
 			});
-			SwingUtilities.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					guis.add(new GUI());
-				}
-			});
+
+			final GUI gui2 = new GUI();
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					recordCounts.add(guis.get(1).recordCount());
+					recordCounts.add(gui2.recordCount());
 				}
 			});
 			SwingUtilities.invokeLater(new Runnable() {
@@ -82,6 +81,16 @@ public class GUITest {
 	}
 
 	@Test
+	/**
+	 * This test adds six records, removes them, undos the removal,
+	 * and removes them again, all whilst asserting that the number
+	 * of records in various lists of the program are as expected.
+	 * 
+	 * This involves the use of the addNewRecord() method (executed when the
+	 * use clicks add), deleteCurrentRecord() method (executed when the user
+	 * presses delete) and undoRecordDelete(). These methods run almost every
+	 * essential method of the GUI and its factory.
+	 */
 	public void testGUIAddRemoveUndoRecords() {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -96,31 +105,40 @@ public class GUITest {
 							expectedSize++;
 							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
+							Assert.assertTrue(expectedSize == gui
+									.getSidePanel().items.size());
 						}
 						boolean reachedZero = false;
 						for (int i = 1; expectedSize > 0 && !reachedZero; i++) {
 							gui.deleteCurrentRecord();
 							expectedSize--;
-							reachedZero = expectedSize == 0 ? true : reachedZero;
+							reachedZero = expectedSize == 0 ? true
+									: reachedZero;
 							expectedSize = expectedSize == 0 ? 1 : expectedSize;
 							// Expect that the GUI adds new record when empty.
 							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
+							Assert.assertTrue(expectedSize == gui
+									.getSidePanel().items.size());
 							Assert.assertTrue(i == gui.getDeletedRecords()
 									.size());
 						}
-						while( gui.getDeletedRecords().size()>0) {
+						while (gui.getDeletedRecords().size() > 0) {
 							gui.selectedRecord.curRecord.setNeedsSave(false);
 							gui.undoRecordDelete();
 							expectedSize++;
 							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
+							Assert.assertTrue(expectedSize == gui
+									.getSidePanel().items.size());
 						}
-						for (int i = 1; expectedSize>0 + 1; i++) {
+						for (int i = 1; expectedSize > 0 + 1; i++) {
 							gui.deleteCurrentRecord();
 							expectedSize--;
 							Assert.assertTrue(expectedSize == gui
 									.getLoadedRecords().size());
+							Assert.assertTrue(expectedSize == gui
+									.getSidePanel().items.size());
 							Assert.assertTrue(i == gui.getDeletedRecords()
 									.size());
 						}
@@ -139,6 +157,14 @@ public class GUITest {
 	}
 
 	@Test
+	/**
+	 * This tests that newly added records are the records in 
+	 * focus, and that by deleting the record, the record loses
+	 * focus.
+	 * 
+	 * In the future, a more comprehensive test with component
+	 * position assertions/etc could be implemented.
+	 */
 	public void testGUIUpdatesAsExpected() {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -166,6 +192,11 @@ public class GUITest {
 	}
 
 	@Test
+	/**
+	 * This runs the save method, and asserts
+	 * that saved records persist through different
+	 * runnings of the program.
+	 */
 	public void testSaveIsPersistent() {
 		final ArrayList<Record> records = new ArrayList<Record>();
 		try {

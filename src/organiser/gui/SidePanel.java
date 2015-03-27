@@ -11,7 +11,7 @@ public class SidePanel extends JPanel implements Resizable {
 
 	private static final long serialVersionUID = -1564366931785130251L;
 	int curPos;
-	ArrayList<Component> items;
+	public ArrayList<Component> items;
 	
 	public SidePanel(){
 		super(null);
