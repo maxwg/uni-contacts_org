@@ -1,0 +1,36 @@
+<Record class organiser.business.contact.ContactRecord>2c1d1256-2bf2-4de7-b3e1-60c5e3358c71
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>
+<Record class organiser.business.contact.ContactRecord>b8b88379-2b58-4fa5-bba9-f0f598b8c9ef
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>
+<Record class organiser.business.contact.ContactRecord>1d167b0d-41cd-403e-988b-8363369ce68a
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>
+<Record class organiser.business.contact.ContactRecord>2705b57a-01df-41e2-a08a-a4ac37e5c48e
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+<class organiser.business.DisplayPictureEmpty>MainDisplayPictureImage</class organiser.business.DisplayPictureEmpty>
+</Record>

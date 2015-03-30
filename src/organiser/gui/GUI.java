@@ -81,7 +81,7 @@ public class GUI implements Runnable, Resizable {
 		} catch (Exception e) {
 			handleCorruptDatabase(e);
 		}
-		
+
 		frame.getContentPane().add(contactsPaneScroll);
 		frame.getContentPane().add(detailsPaneScroll);
 		frame.getContentPane().add(topMenu);
@@ -92,10 +92,10 @@ public class GUI implements Runnable, Resizable {
 		manageResize();
 	}
 
-	public int recordCount(){
+	public int recordCount() {
 		return loadedRecords.size();
 	}
-	
+
 	private void renderRecords() throws Exception {
 		loadedRecords = new ArrayList<RecordPaneItem>();
 		visibleRecords = new ArrayList<RecordPaneItem>();
@@ -106,9 +106,9 @@ public class GUI implements Runnable, Resizable {
 		}
 	}
 
-	private void showVisibleRecords() throws Exception {
+	public void showVisibleRecords() throws Exception {
 		contactsPane.reset();
-		for (RecordPaneItem r : visibleRecords){
+		for (RecordPaneItem r : visibleRecords) {
 			contactsPane.add(r);
 		}
 		manageResize();
@@ -200,8 +200,10 @@ public class GUI implements Runnable, Resizable {
 	}
 
 	public void saveCurrentRecord() throws Exception {
-		if (selectedRecord != null)
+		if (selectedRecord != null) {
 			selectedRecord.curRecord.Save();
+			detailsPane.loadRecord(selectedRecord);
+		}
 	}
 
 	public int showSaveDialog() throws Exception {
@@ -355,10 +357,10 @@ public class GUI implements Runnable, Resizable {
 		visibleRecords.clear();
 		if (query != null && !query.equals("")) {
 			for (RecordPaneItem r : loadedRecords)
-				if (r.curRecord.getMainLabel().toLowerCase().contains(query.toLowerCase()))
+				if (r.curRecord.getMainLabel().toLowerCase()
+						.contains(query.toLowerCase()))
 					visibleRecords.add(r);
-		}
-		else{
+		} else {
 			visibleRecords.addAll(loadedRecords);
 		}
 		showVisibleRecords();

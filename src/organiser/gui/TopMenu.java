@@ -77,9 +77,30 @@ public class TopMenu extends JPanel implements Resizable {
 					}
 				});
 		undo.setLocation(180, 0);
+		JButton longest = new ModernButton("Longest", 60, HEIGHT,
+				new Callable<Object>() {
+					public Object call() throws Exception {
+						int lnamelength = 0;
+						RecordPaneItem rpi = null;
+						for(RecordPaneItem r : gui.loadedRecords){
+							if(r.curRecord.getMainLabel().length() > lnamelength)
+							{
+								lnamelength = r.curRecord.getMainLabel().length();
+								rpi = r;
+							}
+						}
+						gui.visibleRecords.clear();
+						gui.visibleRecords.add(rpi);
+						gui.showVisibleRecords();
+						return null;
+					}
+				});
+		longest.setLocation(240, 0);
+		
 		this.add(add);
 		this.add(remove);
 		this.add(undo);
+		this.add(longest);
 		this.add(exit);
 		this.add(save);
 	}

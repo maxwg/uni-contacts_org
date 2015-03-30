@@ -1,0 +1,27 @@
+<Record class organiser.business.contact.ContactRecord>0d3fe371-2287-4fdd-aa70-003d6edb23f7
+<class organiser.business.contact.ContactName>Namewhatmate</class organiser.business.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.business.contact.PhoneNumber>Mobile123213</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+</Record>
+<Record class organiser.business.contact.ContactRecord>81853be2-75c2-4946-9826-a288c144dc4a
+<class organiser.business.contact.ContactName>NameJamesDude</class organiser.business.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Emailjames@dude.com</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+</Record>
+<Record class organiser.business.contact.ContactRecord>600455f4-d8fe-4f4e-b0c9-48c30705f178
+<class organiser.business.contact.ContactName>NameNewPerson</class organiser.business.contact.ContactName>
+<class organiser.DisplayPicture>Picture</class organiser.DisplayPicture>
+<class organiser.business.contact.PhoneNumber>Mobile</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Home Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.PhoneNumber>Work Ph</class organiser.business.contact.PhoneNumber>
+<class organiser.business.contact.Email>Email</class organiser.business.contact.Email>
+<class organiser.business.contact.Address>Address</class organiser.business.contact.Address>
+</Record>
