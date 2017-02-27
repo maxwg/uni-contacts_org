@@ -1,6 +1,6 @@
 # uni-contacts_org
 A simple Java Swing based contacts organiser for a Uni project
-
+![ss](corg.png)
 
 Run note: A runnable jar has been included, otherwise the library (Filters.jar in /src/) should be added to the eclipse build path (This library provides the blur filter used, as swing's convolve method of blurring is sub-par to JavaFX's). Library provided by http://www.jhlabs.com/ip/blurring.html
 
